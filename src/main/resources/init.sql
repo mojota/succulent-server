@@ -1,0 +1,1 @@
+ALTER TABLE user auto_increment=100000;
