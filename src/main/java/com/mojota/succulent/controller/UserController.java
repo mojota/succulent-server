@@ -8,6 +8,7 @@ import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.ResponseUtil;
 import com.mojota.succulent.utils.ToolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +25,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @RequestMapping("/")
-//    public User add(){
-//        User user = new User();
-//        user.setUserName("uu1");
-//        user.setPassword("pp1");
-//        return userRepository.save(user);
-//    }
-
     /**
      * 注册用户
      */
@@ -44,26 +37,51 @@ public class UserController {
         }
         user.setPassword(ToolUtil.encode16bitMd5(user.getPassword()));//密码加密
         user.setEmail(user.getUserName());
-        ResponseInfo<User> resp = ResponseUtil.success(userService.register
-                (user));
-        return resp;
+        return ResponseUtil.success(userService.register(user));
     }
-//
-//    /**
-//     * 查询所有用户
-//     */
-//    @RequestMapping(value = "/getusers")
-//    public ResponseInfo<List<User>> getUsers() {
-//        return ResponseUtil.success(userService.getUsers());
-//    }
-//
-//    /**
-//     * 查询某用户
-//     */
-//    @RequestMapping(value = "/getuser")
-//    public ResponseInfo<User> getUser(@RequestParam(value = "username",
-// required = true) String
-//                                              username) {
-//        return ResponseUtil.success(userService.getUser(username));
-//    }
+
+    /**
+     * 登录
+     */
+    @PostMapping(value = "/login")
+    public ResponseInfo<User> login(@RequestParam String userName, @RequestParam
+            String password) throws Exception {
+        String passwordMd5 = ToolUtil.encode16bitMd5(password);
+        return ResponseUtil.success(userService.login(userName, passwordMd5));
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param userId
+     * @param nickname
+     * @param region
+     * @param password
+     * @return
+     */
+    @PostMapping(value = "/edit")
+    public ResponseInfo<User> edit(@RequestParam int userId, @RequestParam
+            String nickname, @RequestParam String region, @RequestParam(required =
+            false) String password) throws Exception {
+        if (!StringUtils.isEmpty(password) && password.length() < 6) {
+            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
+                    CodeConstants.MSG_BUSINESS_ERROR_PWD_SHORT);
+        }
+        User user = userService.edit(userId, nickname, region, password);
+        return ResponseUtil.success(user);
+    }
+
+    /**
+     * 修改头像地址
+     *
+     * @param userId
+     * @param avatarUrl
+     * @return
+     */
+    @PostMapping(value = "/editAvatar")
+    public ResponseInfo editAvatarUrl(@RequestParam int userId, @RequestParam
+            String avatarUrl) throws BusinessException {
+        userService.editAvatarUrl(userId, avatarUrl);
+        return ResponseUtil.success(null);
+    }
 }

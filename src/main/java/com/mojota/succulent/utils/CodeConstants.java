@@ -22,5 +22,7 @@ public class CodeConstants {
     public static final String MSG_BUSINESS_ERROR_PWD_EMPTY = "密码不能为空";
     public static final String MSG_BUSINESS_ERROR_PWD_SHORT = "密码最少为6位";
     public static final String MSG_BUSINESS_ERROR_USER_REPEAT = "用户已存在";
+    public static final String MSG_BUSINESS_ERROR_USER_WRONG = "用户名或密码不正确";
+    public static final String MSG_BUSINESS_DATA_NOT_FOUND = "未更新数据";
 
 }

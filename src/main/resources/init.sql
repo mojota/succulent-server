@@ -1,1 +1,1 @@
-ALTER TABLE user auto_increment=100000;
+ALTER TABLE user auto_increment=1000000;
