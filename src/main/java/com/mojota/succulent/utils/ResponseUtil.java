@@ -1,9 +1,6 @@
 package com.mojota.succulent.utils;
 
-import com.mojota.succulent.entity.ResponseInfo;
-
-import java.util.Collection;
-import java.util.Map;
+import com.mojota.succulent.dto.ResponseInfo;
 
 /**
  * 返回响应处理

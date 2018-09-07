@@ -1,4 +1,4 @@
-package com.mojota.succulent.entity;
+package com.mojota.succulent.dto;
 
 /**
  * @author jamie

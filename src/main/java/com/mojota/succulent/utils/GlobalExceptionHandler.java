@@ -1,6 +1,6 @@
 package com.mojota.succulent.utils;
 
-import com.mojota.succulent.entity.ResponseInfo;
+import com.mojota.succulent.dto.ResponseInfo;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

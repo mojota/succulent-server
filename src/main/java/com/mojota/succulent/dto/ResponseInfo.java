@@ -1,4 +1,4 @@
-package com.mojota.succulent.entity;
+package com.mojota.succulent.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -12,13 +12,13 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseInfo<T> {
-    @JsonView(JsonRespView.baseView.class)
+//    @JsonView(JsonRespView.baseView.class)
     private int code;
-    @JsonView(JsonRespView.baseView.class)
+//    @JsonView(JsonRespView.baseView.class)
     private String msg;
-    @JsonView(JsonRespView.baseView.class)
+//    @JsonView(JsonRespView.baseView.class)
     private T data;
-    @JsonView(JsonRespView.baseView.class)
+//    @JsonView(JsonRespView.baseView.class)
     private List<T> list;
 
     public ResponseInfo() {

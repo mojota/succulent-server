@@ -1,6 +1,6 @@
 package com.mojota.succulent.controller;
 
-import com.mojota.succulent.entity.ResponseInfo;
+import com.mojota.succulent.dto.ResponseInfo;
 import com.mojota.succulent.entity.User;
 import com.mojota.succulent.service.UserService;
 import com.mojota.succulent.utils.CodeConstants;
