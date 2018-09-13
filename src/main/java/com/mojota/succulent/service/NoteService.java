@@ -1,16 +1,21 @@
 package com.mojota.succulent.service;
 
 import com.mojota.succulent.dao.NoteDetailRepository;
+import com.mojota.succulent.dao.NoteOperateRepository;
 import com.mojota.succulent.dao.NoteRepository;
+import com.mojota.succulent.dto.NoteDTO;
 import com.mojota.succulent.entity.Note;
 import com.mojota.succulent.entity.NoteDetail;
+import com.mojota.succulent.entity.NoteOperate;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.CodeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author jamie
@@ -25,52 +30,40 @@ public class NoteService {
     @Autowired
     NoteDetailRepository noteDetailRepository;
 
+    @Autowired
+    NoteOperateRepository noteOperateRepository;
+
     /**
      * 添加笔记
      */
 
-    @Transactional(rollbackOn = Exception.class)
-    public void noteAdd(Note note, String content) throws BusinessException {
-        Note resultNote = noteRepository.save(note);
-
-        NoteDetail noteDetail = new NoteDetail();
-        noteDetail.setNoteId(resultNote.getNoteId());
-        noteDetail.setContent(content);
-        noteDetail.setStrPicUrls(resultNote.getStrPicUrls());
-        noteDetail.setCreateTime(resultNote.getUpdateTime());
-        detailAdd(noteDetail);
+    public void noteAdd(Note note) throws BusinessException {
+        noteRepository.save(note);
     }
 
     /**
      * 添加笔记明细，更新note表时间
      */
     public void detailAdd(NoteDetail noteDetail) throws BusinessException {
-        if (noteDetail.getNoteId() == null || noteDetail.getNoteId() == 0) {
-            //若noteId为空，则不写入明细表
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
-        }
         if (StringUtils.isEmpty(noteDetail.getContent()) && StringUtils.isEmpty
-                (noteDetail.getStrPicUrls())) {//若内容为空，则不写入明细表
+                (noteDetail.getPicUrls())) {//若内容为空，则不写入明细表
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_DATA_EMPTY);
         }
         noteDetailRepository.save(noteDetail);
-        noteRepository.updateUpdateTimeByNoteId(noteDetail.getCreateTime(),
-                noteDetail.getNoteId());
     }
 
     /**
      * 编辑笔记明细
      */
-    public void detailEdit(Integer detailId, String content, String strPicUrls)
+    public void detailEdit(Integer detailId, String content, String picUrls)
             throws BusinessException {
         if (detailId == null) {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_NOTE_DETAIL_NOT_FOUND);
         }
         if (noteDetailRepository.updateDetailByDetailId(detailId, content,
-                strPicUrls) <= 0) {
+                picUrls) <= 0) {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
         }
@@ -98,16 +91,52 @@ public class NoteService {
     /**
      * 更改笔记权限
      */
-    public void notePermissionChange(Long noteId, int permission) throws
-            BusinessException {
+    public void notePermissionChange(Integer userId, Long noteId, int permission)
+            throws BusinessException {
         if (noteId == null) {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
         }
-        if (noteRepository.updatePermissionByNoteId(noteId, permission) <= 0) {
+        if (noteRepository.updatePermissionByNoteIdAndUserId(permission, noteId,
+                userId) <= 0) {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
         }
+    }
+
+
+    /**
+     * 喜欢
+     * 置状态并计数
+     */
+    @Transactional(rollbackOn = Exception.class)
+    public void noteLike(Integer userId, Long noteId, int isLike) throws
+            BusinessException {
+        NoteOperate noteOperate = noteOperateRepository
+                .findNoteOperateByUserIdAndNoteId(userId, noteId);
+        if (noteOperate != null) {
+            noteOperate.setIsLike(isLike);
+        } else {
+            noteOperate = new NoteOperate();
+            noteOperate.setUserId(userId);
+            noteOperate.setNoteId(noteId);
+            noteOperate.setIsLike(isLike);
+        }
+        noteOperateRepository.saveAndFlush(noteOperate);
+
+        Note note = getNoteByNoteId(noteId);
+        if (note == null) {
+            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
+                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+        }
+        int newCount = note.getLikeCount();
+        if (isLike == 1) {
+            newCount = newCount + 1;
+        } else if (isLike == 0) {
+            newCount = newCount - 1;
+        }
+        note.setLikeCount(newCount);
+        noteRepository.save(note);
     }
 
     /**
@@ -130,7 +159,22 @@ public class NoteService {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
         }
-        noteRepository.deleteById(noteId);
-        noteDetailRepository.deleteByNoteId(noteId);
+        // note表未做onetomany关联，故这里并别删除
+        noteDetailRepository.deleteByNoteId(noteId); // 先删子表
+        noteRepository.deleteById(noteId);// 再删主表
     }
+
+    public Note getNoteByNoteId(Long noteId) {
+        return noteRepository.findNoteByNoteId(noteId);
+    }
+
+    public List<NoteDTO> getNoteListByUserIdAndNoteType(Integer userId, Integer
+            noteType, Long updateTime, Pageable pageable) {
+        return noteRepository.findNoteDtos(userId, noteType, updateTime, pageable);
+    }
+
+//    public List<NoteDTO> getListTest() {
+//        return noteRepository.findNoteDto();
+//    }
+
 }

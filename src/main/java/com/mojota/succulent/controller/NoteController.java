@@ -1,18 +1,23 @@
 package com.mojota.succulent.controller;
 
-import com.mojota.succulent.entity.Note;
+import com.mojota.succulent.dto.NoteDTO;
 import com.mojota.succulent.dto.ResponseInfo;
+import com.mojota.succulent.entity.Note;
 import com.mojota.succulent.entity.NoteDetail;
 import com.mojota.succulent.service.NoteService;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 /**
@@ -34,20 +39,49 @@ public class NoteController {
         }
     }
 
-    @PostMapping(value = "/diaryAdd")
-    public ResponseInfo diaryAdd(@RequestParam Integer userId, @RequestParam String
-            noteTitle, @RequestParam String content, @RequestParam int noteType,
-                                 @RequestParam String strPicUrls) throws
+    @PostMapping(value = "/noteAdd")
+    public ResponseInfo noteAdd(@RequestParam Integer userId, @RequestParam String
+            noteTitle, @RequestParam Integer permission, @RequestParam int noteType,
+                                @RequestParam String picUrls) throws
             BusinessException {
         checkUser(userId);
 
+        long time = System.currentTimeMillis();
+        Note note = new Note();
+        note.setUserId(userId);
+        note.setNoteTitle(noteTitle);
+        note.setPermission(permission);
+        note.setNoteType(noteType);
+        note.setPicUrls(picUrls);
+        note.setUpdateTime(time);
+        noteService.noteAdd(note);
+
+        return ResponseUtil.success(null);
+    }
+
+
+    @PostMapping(value = "/diaryAdd")
+    public ResponseInfo diaryAdd(@RequestParam Integer userId, @RequestParam String
+            noteTitle, @RequestParam String content, @RequestParam int noteType,
+                                 @RequestParam String picUrls) throws
+            BusinessException {
+        checkUser(userId);
+
+        long time = System.currentTimeMillis();
         Note note = new Note();
         note.setUserId(userId);
         note.setNoteTitle(noteTitle);
         note.setNoteType(noteType);
-        note.setStrPicUrls(strPicUrls);
-        note.setUpdateTime(System.currentTimeMillis());
-        noteService.noteAdd(note, content);
+        note.setPicUrls(picUrls);
+        note.setUpdateTime(time);
+
+        NoteDetail noteDetail = new NoteDetail();
+        noteDetail.setNote(note);
+        noteDetail.setContent(content);
+        noteDetail.setPicUrls(picUrls);
+        noteDetail.setCreateTime(time);
+
+        noteService.detailAdd(noteDetail);
         return ResponseUtil.success(null);
     }
 
@@ -55,14 +89,22 @@ public class NoteController {
     @PostMapping(value = "/diaryDetailAdd")
     public ResponseInfo diaryDetailAdd(@RequestParam Integer userId, @RequestParam
             Long noteId, @RequestParam String content, @RequestParam String
-                                               strPicUrls) throws BusinessException {
+                                               picUrls) throws BusinessException {
         checkUser(userId);
 
+        long time = System.currentTimeMillis();
+        Note note = noteService.getNoteByNoteId(noteId);
+        if (note == null) {
+            //若note为空，则不写入明细表
+            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
+                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+        }
+        note.setUpdateTime(time);
         NoteDetail noteDetail = new NoteDetail();
-        noteDetail.setNoteId(noteId);
+        noteDetail.setNote(note);
         noteDetail.setContent(content);
-        noteDetail.setStrPicUrls(strPicUrls);
-        noteDetail.setCreateTime(System.currentTimeMillis());
+        noteDetail.setPicUrls(picUrls);
+        noteDetail.setCreateTime(time);
         noteService.detailAdd(noteDetail);
         return ResponseUtil.success(null);
     }
@@ -71,11 +113,11 @@ public class NoteController {
     public ResponseInfo diaryDetailEdit(@RequestParam Integer userId,
                                         @RequestParam Integer detailId, @RequestParam
                                                 String content, @RequestParam
-                                                String strPicUrls) throws
+                                                String picUrls) throws
             BusinessException {
         checkUser(userId);
 
-        noteService.detailEdit(detailId, content, strPicUrls);
+        noteService.detailEdit(detailId, content, picUrls);
         return ResponseUtil.success(null);
     }
 
@@ -95,9 +137,24 @@ public class NoteController {
                                                      int permission) throws
             BusinessException {
         checkUser(userId);
-        noteService.notePermissionChange(noteId, permission);
+        noteService.notePermissionChange(userId, noteId, permission);
         return ResponseUtil.success(null);
     }
+
+    @PostMapping(value = "/noteLike")
+    public ResponseInfo noteLike(@RequestParam Integer userId,
+                                 @RequestParam Long noteId, @RequestParam
+                                         int isLike) throws
+            BusinessException {
+        checkUser(userId);
+        if (noteId == null) {
+            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
+                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+        }
+        noteService.noteLike(userId, noteId, isLike);
+        return ResponseUtil.success(null);
+    }
+
 
     @PostMapping(value = "/deleteNoteDetail")
     public ResponseInfo deleteNoteDetail(@RequestParam Integer userId,
@@ -116,4 +173,30 @@ public class NoteController {
         noteService.deleteNote(noteId);
         return ResponseUtil.success(null);
     }
+
+    @PostMapping(value = "/getNoteList")
+    public ResponseInfo getNoteListByUserIdAndNoteType(@RequestParam Integer userId,
+                                            @RequestParam Integer noteType,
+                                            @RequestParam(required = false) Long updateTime,
+                                            @PageableDefault(page = 0,size = 1) Pageable
+                                                    pageable)
+            throws BusinessException {
+        checkUser(userId);
+
+        if (updateTime == null) {
+            updateTime =System.currentTimeMillis();
+        }
+        if (pageable.getPageSize() == 1){ // 如果不传size，就取全部
+            pageable = null;
+        }
+        List<NoteDTO> list = noteService.getNoteListByUserIdAndNoteType(userId,
+                noteType, updateTime, pageable);
+        return ResponseUtil.success(list, pageable);
+    }
+
+//
+//    @PostMapping
+//    public List<NoteDTO> getListTest() {
+//        return noteService.getListTest();
+//    }
 }

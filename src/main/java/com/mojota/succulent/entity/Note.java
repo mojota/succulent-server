@@ -18,7 +18,7 @@ public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long noteId;//笔记id
+    Long noteId;//笔记id
 
     @Column(nullable = false)
     int noteType; // 笔记类型 1-成长笔记 2-造景
@@ -36,19 +36,19 @@ public class Note {
     int likeCount; // 赞数
 
     @Column(columnDefinition = "TEXT")
-    String strPicUrls; // 封面图片地址们,以;为分隔符保存
-
-    @Transient
-    List<String> picUrls; // 图片地址们, 返回用
+    String picUrls; // 封面图片地址们,以;为分隔符保存
 
     @Column(nullable = false)
     int userId; // 发布用户id
 
-    public long getNoteId() {
+//    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "note")
+//    List<NoteDetail> noteDetails;
+
+    public Long getNoteId() {
         return noteId;
     }
 
-    public void setNoteId(long noteId) {
+    public void setNoteId(Long noteId) {
         this.noteId = noteId;
     }
 
@@ -92,19 +92,11 @@ public class Note {
         this.likeCount = likeCount;
     }
 
-    public String getStrPicUrls() {
-        return strPicUrls;
-    }
-
-    public void setStrPicUrls(String strPicUrls) {
-        this.strPicUrls = strPicUrls;
-    }
-
-    public List<String> getPicUrls() {
+    public String getPicUrls() {
         return picUrls;
     }
 
-    public void setPicUrls(List<String> picUrls) {
+    public void setPicUrls(String picUrls) {
         this.picUrls = picUrls;
     }
 
@@ -115,4 +107,5 @@ public class Note {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
 }

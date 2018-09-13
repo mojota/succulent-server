@@ -25,8 +25,8 @@ public class NoteOperate {
     @Column(nullable = false)
     int userId;
 
-    @Column
-    int hasLike; // 0未赞 1已赞
+    @Column(nullable = false, columnDefinition = "int default 0")
+    int isLike; // 0未赞 1已赞
 
     public long getId() {
         return id;
@@ -52,11 +52,11 @@ public class NoteOperate {
         this.userId = userId;
     }
 
-    public int getHasLike() {
-        return hasLike;
+    public int getIsLike() {
+        return isLike;
     }
 
-    public void setHasLike(int hasLike) {
-        this.hasLike = hasLike;
+    public void setIsLike(int isLike) {
+        this.isLike = isLike;
     }
 }

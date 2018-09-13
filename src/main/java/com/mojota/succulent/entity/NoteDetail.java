@@ -22,8 +22,15 @@ public class NoteDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer detailId;//详情id
 
-    @Column(nullable = false)
-    Long noteId;// 笔记id
+//    @Column(nullable = false)
+//    Long noteId;// 笔记id
+
+    // 不要DELETE级联
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch =
+            FetchType.LAZY)
+    @JoinColumn(name = "noteId", foreignKey = @ForeignKey(name = "fk_note_id"),
+            nullable = false)
+    Note note;
 
     @Column(columnDefinition = "TEXT")
     String content;// 笔记内容
@@ -32,10 +39,7 @@ public class NoteDetail {
     long createTime;// 记录时间
 
     @Column(columnDefinition = "TEXT")
-    String strPicUrls; // 图片地址们,以;为分隔符保存
-
-    @Transient
-    List<String> picUrls;// 图片地址们, 返回用
+    String picUrls; // 图片地址们,以;为分隔符保存
 
     public Integer getDetailId() {
         return detailId;
@@ -45,13 +49,21 @@ public class NoteDetail {
         this.detailId = detailId;
     }
 
-    public Long getNoteId() {
-        return noteId;
+    public Note getNote() {
+        return note;
     }
 
-    public void setNoteId(Long noteId) {
-        this.noteId = noteId;
+    public void setNote(Note note) {
+        this.note = note;
     }
+
+//    public Long getNoteId() {
+//        return noteId;
+//    }
+//
+//    public void setNoteId(Long noteId) {
+//        this.noteId = noteId;
+//    }
 
     public String getContent() {
         return content;
@@ -69,19 +81,11 @@ public class NoteDetail {
         this.createTime = createTime;
     }
 
-    public String getStrPicUrls() {
-        return strPicUrls;
-    }
-
-    public void setStrPicUrls(String strPicUrls) {
-        this.strPicUrls = strPicUrls;
-    }
-
-    public List<String> getPicUrls() {
+    public String getPicUrls() {
         return picUrls;
     }
 
-    public void setPicUrls(List<String> picUrls) {
+    public void setPicUrls(String picUrls) {
         this.picUrls = picUrls;
     }
 }
