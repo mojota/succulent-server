@@ -144,14 +144,14 @@ public class NoteController {
     @PostMapping(value = "/noteLike")
     public ResponseInfo noteLike(@RequestParam Integer userId,
                                  @RequestParam Long noteId, @RequestParam
-                                         int isLike) throws
+                                         int isLikey) throws
             BusinessException {
         checkUser(userId);
         if (noteId == null) {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
         }
-        noteService.noteLike(userId, noteId, isLike);
+        noteService.noteLike(userId, noteId, isLikey);
         return ResponseUtil.success(null);
     }
 
@@ -176,17 +176,21 @@ public class NoteController {
 
     @PostMapping(value = "/getNoteList")
     public ResponseInfo getNoteListByUserIdAndNoteType(@RequestParam Integer userId,
-                                            @RequestParam Integer noteType,
-                                            @RequestParam(required = false) Long updateTime,
-                                            @PageableDefault(page = 0,size = 1) Pageable
-                                                    pageable)
+                                                       @RequestParam Integer
+                                                               noteType,
+                                                       @RequestParam(required =
+                                                               false) Long
+                                                                   updateTime,
+                                                       @PageableDefault(page = 0,
+                                                               size = 1) Pageable
+                                                               pageable)
             throws BusinessException {
         checkUser(userId);
 
         if (updateTime == null) {
-            updateTime =System.currentTimeMillis();
+            updateTime = System.currentTimeMillis();
         }
-        if (pageable.getPageSize() == 1){ // 如果不传size，就取全部
+        if (pageable.getPageSize() == 1) { // 如果不传size，就取全部
             pageable = null;
         }
         List<NoteDTO> list = noteService.getNoteListByUserIdAndNoteType(userId,
@@ -194,9 +198,20 @@ public class NoteController {
         return ResponseUtil.success(list, pageable);
     }
 
-//
-//    @PostMapping
-//    public List<NoteDTO> getListTest() {
-//        return noteService.getListTest();
-//    }
+    @PostMapping(value = "/getMoments")
+    public ResponseInfo getMoments(@RequestParam Integer userId,
+                                   @RequestParam(required = false) Long updateTime,
+                                   @PageableDefault(page = 0, size = 1) Pageable
+                                           pageable) throws BusinessException {
+
+        if (updateTime == null) {
+            updateTime = System.currentTimeMillis();
+        }
+        if (pageable.getPageSize() == 1) { // 如果不传size，就取全部
+            pageable = null;
+        }
+
+        List<NoteDTO> list = noteService.getMoments(userId, updateTime, pageable);
+        return ResponseUtil.success(list, pageable);
+    }
 }

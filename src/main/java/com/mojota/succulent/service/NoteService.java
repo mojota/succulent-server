@@ -110,17 +110,17 @@ public class NoteService {
      * 置状态并计数
      */
     @Transactional(rollbackOn = Exception.class)
-    public void noteLike(Integer userId, Long noteId, int isLike) throws
+    public void noteLike(Integer userId, Long noteId, int isLikey) throws
             BusinessException {
         NoteOperate noteOperate = noteOperateRepository
                 .findNoteOperateByUserIdAndNoteId(userId, noteId);
         if (noteOperate != null) {
-            noteOperate.setIsLike(isLike);
+            noteOperate.setIsLikey(isLikey);
         } else {
             noteOperate = new NoteOperate();
             noteOperate.setUserId(userId);
             noteOperate.setNoteId(noteId);
-            noteOperate.setIsLike(isLike);
+            noteOperate.setIsLikey(isLikey);
         }
         noteOperateRepository.saveAndFlush(noteOperate);
 
@@ -129,13 +129,8 @@ public class NoteService {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
         }
-        int newCount = note.getLikeCount();
-        if (isLike == 1) {
-            newCount = newCount + 1;
-        } else if (isLike == 0) {
-            newCount = newCount - 1;
-        }
-        note.setLikeCount(newCount);
+        int newCount = noteOperateRepository.countByNoteIdAndIsLikey(noteId, 1);
+        note.setLikeyCount(newCount);
         noteRepository.save(note);
     }
 
@@ -168,13 +163,20 @@ public class NoteService {
         return noteRepository.findNoteByNoteId(noteId);
     }
 
+    /**
+     * 按类型查询当前用户笔记
+     */
     public List<NoteDTO> getNoteListByUserIdAndNoteType(Integer userId, Integer
             noteType, Long updateTime, Pageable pageable) {
         return noteRepository.findNoteDtos(userId, noteType, updateTime, pageable);
     }
 
-//    public List<NoteDTO> getListTest() {
-//        return noteRepository.findNoteDto();
-//    }
+    /**
+     * 查询已公开的笔记
+     */
+    public List<NoteDTO> getMoments(Integer userId, Long updateTime, Pageable
+            pageable) {
+        return noteRepository.findMoments(userId, updateTime, pageable);
+    }
 
 }

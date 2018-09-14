@@ -17,46 +17,46 @@ public class NoteOperate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id; // 自增id
+    Long id; // 自增id
 
     @Column(nullable = false)
-    long noteId;
+    Long noteId;
 
     @Column(nullable = false)
-    int userId;
+    Integer userId;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    int isLike; // 0未赞 1已赞
+    Integer isLikey; // 0未赞 1已赞
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getNoteId() {
+    public Long getNoteId() {
         return noteId;
     }
 
-    public void setNoteId(long noteId) {
+    public void setNoteId(Long noteId) {
         this.noteId = noteId;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public int getIsLike() {
-        return isLike;
+    public Integer getIsLikey() {
+        return isLikey;
     }
 
-    public void setIsLike(int isLike) {
-        this.isLike = isLike;
+    public void setIsLikey(Integer isLikey) {
+        this.isLikey = isLikey;
     }
 }

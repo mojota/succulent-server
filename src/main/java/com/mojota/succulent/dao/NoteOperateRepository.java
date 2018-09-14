@@ -10,13 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @author jamie
  * @date 18-9-6
  */
-public interface NoteOperateRepository extends JpaRepository<NoteOperate, Integer> {
+public interface NoteOperateRepository extends JpaRepository<NoteOperate, Long> {
 
 //    @Transactional
 //    @Modifying
-//    @Query(value = "update NoteOperate set isLike = ?1 where userId = ?2 and " +
+//    @Query(value = "update NoteOperate set isLikey = ?1 where userId = ?2 and " +
 //            "noteId = ?3")
-//    int updateIsLikeByNoteId(int isLike, Integer userId, Long noteId);
+//    int updateIsLikeyByNoteId(int isLikey, Integer userId, Long noteId);
 
     NoteOperate findNoteOperateByUserIdAndNoteId(Integer userId, Long noteId);
+
+    int countByNoteIdAndIsLikey(Long noteId, Integer isLikey);
 }

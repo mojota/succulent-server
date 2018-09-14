@@ -41,13 +41,21 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 //    List<Note> findNotesByUserId(Integer userId);
 
     @Query("select n.noteId as noteId, n.noteTitle as noteTitle, n.updateTime as " +
-            "updateTime,n.permission as permission,n.likeCount as likeCount" +
-            ",n.noteType as noteType,n.picUrls as picUrls,no.isLike as " +
-            "isLike,u as userInfo  from Note n inner join User u on n.userId = u" +
+            "updateTime,n.permission as permission,n.likeyCount as likeyCount" +
+            ",n.noteType as noteType,n.picUrls as picUrls,no.isLikey as " +
+            "isLikey,u as userInfo from Note n inner join User u on n.userId = u" +
             ".userId left join NoteOperate no on n.noteId=no.noteId and n" +
             ".userId=no.userId where n.userId = ?1 and n.noteType = ?2 and n" +
             ".updateTime <?3 order by n.updateTime desc")
-    List<NoteDTO> findNoteDtos(Integer userId, Integer
-            noteType, Long updateTime, Pageable pageable);
+    List<NoteDTO> findNoteDtos(Integer userId, Integer noteType, Long updateTime,
+                               Pageable pageable);
 
+    @Query("select n.noteId as noteId, n.noteTitle as noteTitle, n.updateTime as " +
+            "updateTime,n.permission as permission,n.likeyCount as likeyCount" +
+            ",n.noteType as noteType,n.picUrls as picUrls,no.isLikey as " +
+            "isLikey,u as userInfo from Note n inner join User u on n.userId = u" +
+            ".userId left join NoteOperate no on n.noteId=no.noteId and no.userId " +
+            "= ?1 where n.permission = 1 and n.updateTime <?2 order by n" +
+            ".updateTime desc")
+    List<NoteDTO> findMoments(Integer userId, Long updateTime, Pageable pageable);
 }

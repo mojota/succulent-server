@@ -33,7 +33,7 @@ public class Note {
     int permission; // 0保密 1公开
 
     @Column
-    int likeCount; // 赞数
+    int likeyCount; // 赞数
 
     @Column(columnDefinition = "TEXT")
     String picUrls; // 封面图片地址们,以;为分隔符保存
@@ -84,12 +84,12 @@ public class Note {
         this.permission = permission;
     }
 
-    public int getLikeCount() {
-        return likeCount;
+    public int getLikeyCount() {
+        return likeyCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
+    public void setLikeyCount(int likeyCount) {
+        this.likeyCount = likeyCount;
     }
 
     public String getPicUrls() {
