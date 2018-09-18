@@ -1,6 +1,7 @@
 package com.mojota.succulent.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ public class NoteDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer detailId;//详情id
+    Long detailId;//详情id
 
 //    @Column(nullable = false)
 //    Long noteId;// 笔记id
@@ -30,6 +31,7 @@ public class NoteDetail {
             FetchType.LAZY)
     @JoinColumn(name = "noteId", foreignKey = @ForeignKey(name = "fk_note_id"),
             nullable = false)
+    @JsonIgnore
     Note note;
 
     @Column(columnDefinition = "TEXT")
@@ -41,11 +43,11 @@ public class NoteDetail {
     @Column(columnDefinition = "TEXT")
     String picUrls; // 图片地址们,以;为分隔符保存
 
-    public Integer getDetailId() {
+    public Long getDetailId() {
         return detailId;
     }
 
-    public void setDetailId(Integer detailId) {
+    public void setDetailId(Long detailId) {
         this.detailId = detailId;
     }
 

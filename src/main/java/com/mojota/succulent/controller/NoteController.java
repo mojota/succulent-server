@@ -10,7 +10,6 @@ import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -111,7 +110,7 @@ public class NoteController {
 
     @PostMapping(value = "/diaryDetailEdit")
     public ResponseInfo diaryDetailEdit(@RequestParam Integer userId,
-                                        @RequestParam Integer detailId, @RequestParam
+                                        @RequestParam Long detailId, @RequestParam
                                                 String content, @RequestParam
                                                 String picUrls) throws
             BusinessException {
@@ -158,7 +157,7 @@ public class NoteController {
 
     @PostMapping(value = "/deleteNoteDetail")
     public ResponseInfo deleteNoteDetail(@RequestParam Integer userId,
-                                         @RequestParam Integer detailId) throws
+                                         @RequestParam Long detailId) throws
             BusinessException {
         checkUser(userId);
         noteService.deleteNoteDetail(detailId);
@@ -166,8 +165,8 @@ public class NoteController {
     }
 
     @PostMapping(value = "/deleteNote")
-    public ResponseInfo deleteNoteDetail(@RequestParam Integer userId,
-                                         @RequestParam Long noteId) throws
+    public ResponseInfo deleteNote(@RequestParam Integer userId,
+                                   @RequestParam Long noteId) throws
             BusinessException {
         checkUser(userId);
         noteService.deleteNote(noteId);
@@ -180,7 +179,7 @@ public class NoteController {
                                                                noteType,
                                                        @RequestParam(required =
                                                                false) Long
-                                                                   updateTime,
+                                                               updateTime,
                                                        @PageableDefault(page = 0,
                                                                size = 1) Pageable
                                                                pageable)
@@ -213,5 +212,22 @@ public class NoteController {
 
         List<NoteDTO> list = noteService.getMoments(userId, updateTime, pageable);
         return ResponseUtil.success(list, pageable);
+    }
+
+    @PostMapping(value = "/getDiaryDetails")
+    public ResponseInfo getDiaryDetails(@RequestParam Long noteId,
+                                        @RequestParam(required = false) Long
+                                                createTime,
+                                        @PageableDefault(page = 0, size = 1) Pageable
+                                                pageable) {
+        if (createTime == null) {
+            createTime = System.currentTimeMillis();
+        }
+        if (pageable.getPageSize() == 1) { // 如果不传size，就取全部
+            pageable = null;
+        }
+        List<NoteDetail> diarys = noteService.getDetails(noteId, createTime,
+                pageable);
+        return ResponseUtil.success(diarys, pageable);
     }
 }

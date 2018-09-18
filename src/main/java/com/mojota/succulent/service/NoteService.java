@@ -56,7 +56,7 @@ public class NoteService {
     /**
      * 编辑笔记明细
      */
-    public void detailEdit(Integer detailId, String content, String picUrls)
+    public void detailEdit(Long detailId, String content, String picUrls)
             throws BusinessException {
         if (detailId == null) {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
@@ -137,7 +137,7 @@ public class NoteService {
     /**
      * 删除笔记条目
      */
-    public void deleteNoteDetail(Integer detailId) throws BusinessException {
+    public void deleteNoteDetail(Long detailId) throws BusinessException {
         if (detailId == null) {
             throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
                     CodeConstants.MSG_BUSINESS_NOTE_DETAIL_NOT_FOUND);
@@ -179,4 +179,10 @@ public class NoteService {
         return noteRepository.findMoments(userId, updateTime, pageable);
     }
 
+    public List<NoteDetail> getDetails(Long noteId, Long createTime, Pageable
+            pageable) {
+        return noteDetailRepository
+                .findByCreateTimeBeforeAndNote_NoteIdOrderByCreateTimeDesc
+                        (createTime, noteId, pageable);
+    }
 }
