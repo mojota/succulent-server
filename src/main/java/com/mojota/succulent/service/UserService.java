@@ -18,7 +18,7 @@ import org.springframework.util.StringUtils;
 public class UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     /**
      * 注册用户

@@ -25,13 +25,13 @@ import java.util.List;
 public class NoteService {
 
     @Autowired
-    NoteRepository noteRepository;
+    private NoteRepository noteRepository;
 
     @Autowired
-    NoteDetailRepository noteDetailRepository;
+    private NoteDetailRepository noteDetailRepository;
 
     @Autowired
-    NoteOperateRepository noteOperateRepository;
+    private NoteOperateRepository noteOperateRepository;
 
     /**
      * 添加笔记
@@ -131,7 +131,7 @@ public class NoteService {
         }
         int newCount = noteOperateRepository.countByNoteIdAndIsLikey(noteId, 1);
         note.setLikeyCount(newCount);
-        noteRepository.save(note);
+        noteRepository.saveAndFlush(note);
     }
 
     /**

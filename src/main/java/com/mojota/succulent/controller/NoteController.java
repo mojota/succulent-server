@@ -201,7 +201,7 @@ public class NoteController {
     public ResponseInfo getMoments(@RequestParam Integer userId,
                                    @RequestParam(required = false) Long updateTime,
                                    @PageableDefault(page = 0, size = 1) Pageable
-                                           pageable) throws BusinessException {
+                                           pageable) {
 
         if (updateTime == null) {
             updateTime = System.currentTimeMillis();
