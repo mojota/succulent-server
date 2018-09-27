@@ -4,6 +4,7 @@ import com.mojota.succulent.dto.AnswerDTO;
 import com.mojota.succulent.entity.Answer;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -29,5 +30,10 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     int countByQuestionId(Long questionId);
 
+    @Modifying
+    int deleteByQuestionId(Long questionId);
+
+    @Modifying
+    int deleteByAnswerIdAndUserId(Long answerId, Integer userId);
 
 }

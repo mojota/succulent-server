@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class QaService {
     public void answerAdd(Answer answer) {
         answerRepository.save(answer);
 
-        Long questionId =answer.getQuestionId();
+        Long questionId = answer.getQuestionId();
         Question question = questionRepository.findByQuestionId(questionId);
         int answerCount = answerRepository.countByQuestionId(questionId);
         question.setAnswerCount(answerCount);
@@ -77,5 +78,28 @@ public class QaService {
         int newUpCount = answerOperateRepository.countByAnswerIdAndIsUp(answerId, 1);
         answer.setUpCount(newUpCount);
         answerRepository.saveAndFlush(answer);
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteQuestion(Integer userId, Long questionId) throws BusinessException {
+        // 先删回答表，再删问题表
+        answerRepository.deleteByQuestionId(questionId);
+        if (questionRepository.deleteByQuestionIdAndUserId(questionId, userId) <= 0) {
+            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
+                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+        }
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteAnswer(Integer userId, Long answerId, Long questionId) throws BusinessException {
+        if (answerRepository.deleteByAnswerIdAndUserId(answerId, userId) <= 0) {
+            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
+                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+        } else {
+            Question question = questionRepository.findByQuestionId(questionId);
+            int answerCount = answerRepository.countByQuestionId(questionId);
+            question.setAnswerCount(answerCount);
+            questionRepository.saveAndFlush(question);
+        }
     }
 }

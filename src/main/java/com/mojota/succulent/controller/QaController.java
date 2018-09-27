@@ -134,4 +134,21 @@ public class QaController {
         qaService.answerUp(userId, answerId, isUp);
         return ResponseUtil.success(null);
     }
+
+    @PostMapping(value = "/deleteQuestion")
+    public ResponseInfo deleteQuestion(@RequestParam Integer userId,
+                                       @RequestParam Long questionId) throws BusinessException {
+        checkUser(userId);
+        qaService.deleteQuestion(userId, questionId);
+        return ResponseUtil.success(null);
+    }
+
+    @PostMapping(value = "/deleteAnswer")
+    public ResponseInfo deleteAnswer(@RequestParam Integer userId,
+                                     @RequestParam Long questionId,
+                                     @RequestParam Long answerId) throws BusinessException {
+        checkUser(userId);
+        qaService.deleteAnswer(userId, answerId, questionId);
+        return ResponseUtil.success(null);
+    }
 }

@@ -21,6 +21,8 @@ public interface AnswerDTO {
 
     Long getAnswerId();
 
+    Long getQuestionId();
+
     String getAnswerContent();
 
     Long getAnswerTime();

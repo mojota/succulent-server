@@ -4,6 +4,7 @@ import com.mojota.succulent.dto.QuestionDTO;
 import com.mojota.succulent.entity.Question;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -22,4 +23,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<QuestionDTO> findQaList(Long questionTime, Pageable pageable);
 
     Question findByQuestionId(Long questionId);
+
+    @Modifying
+    int deleteByQuestionIdAndUserId(Long questionId, Integer userId);
 }
