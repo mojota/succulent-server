@@ -13,6 +13,10 @@ public class BusinessException extends Exception {
         this.code = code;
         this.msg = msg;
     }
+    public BusinessException(ResultEnum resultEnum){
+        this.code = resultEnum.getCode();
+        this.msg = resultEnum.getMsg();
+    }
 
     public int getCode() {
         return code;

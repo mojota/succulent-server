@@ -17,8 +17,8 @@ public class ResponseUtil {
 
     public static ResponseInfo success(Object o, Pageable pageable) {
         ResponseInfo respInfo = new ResponseInfo();
-        respInfo.setCode(CodeConstants.CODE_SUCCESS);
-        respInfo.setMsg("success");
+        respInfo.setCode(ResultEnum.SUCCESS.getCode());
+        respInfo.setMsg(ResultEnum.SUCCESS.getMsg());
         if (pageable != null) {
             PageInfo pageInfo = new PageInfo();
             pageInfo.setPageSize(pageable.getPageSize());
@@ -37,11 +37,17 @@ public class ResponseUtil {
         return success(o, null);
     }
 
-    public static ResponseInfo failure(int code, String msg) {
+    public static ResponseInfo failure(ResultEnum resultEnum) {
         ResponseInfo respInfo = new ResponseInfo();
-        respInfo.setCode(code);
-        respInfo.setMsg(msg);
+        respInfo.setCode(resultEnum.getCode());
+        respInfo.setMsg(resultEnum.getMsg());
         return respInfo;
     }
 
+    public static ResponseInfo failure(int code, String message) {
+        ResponseInfo respInfo = new ResponseInfo();
+        respInfo.setCode(code);
+        respInfo.setMsg(message);
+        return respInfo;
+    }
 }

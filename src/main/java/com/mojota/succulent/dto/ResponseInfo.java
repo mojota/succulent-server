@@ -1,7 +1,6 @@
 package com.mojota.succulent.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mojota.succulent.utils.CodeConstants;
 
 import java.util.List;
 
@@ -16,11 +15,6 @@ public class ResponseInfo<T> {
     private T data;
     private List<T> list;
     private PageInfo pageInfo;
-
-    public ResponseInfo() {
-        code = CodeConstants.CODE_SUCCESS;
-        msg = "";
-    }
 
     public int getCode() {
         return code;

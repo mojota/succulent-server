@@ -6,8 +6,8 @@ import com.mojota.succulent.entity.Note;
 import com.mojota.succulent.entity.NoteDetail;
 import com.mojota.succulent.service.NoteService;
 import com.mojota.succulent.utils.BusinessException;
-import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.ResponseUtil;
+import com.mojota.succulent.utils.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -33,8 +33,7 @@ public class NoteController {
     private void checkUser(Integer userId) throws BusinessException {
         // userId不可为空
         if (userId == null || userId == 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_ERROR_USER_NOT_LOGIN);
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_NOT_LOGIN);
         }
     }
 
@@ -95,8 +94,7 @@ public class NoteController {
         Note note = noteService.getNoteByNoteId(noteId);
         if (note == null) {
             //若note为空，则不写入明细表
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
         note.setUpdateTime(time);
         NoteDetail noteDetail = new NoteDetail();
@@ -147,8 +145,7 @@ public class NoteController {
             BusinessException {
         checkUser(userId);
         if (noteId == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
         noteService.noteLike(userId, noteId, isLikey);
         return ResponseUtil.success(null);

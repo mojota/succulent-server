@@ -8,7 +8,7 @@ import com.mojota.succulent.entity.Note;
 import com.mojota.succulent.entity.NoteDetail;
 import com.mojota.succulent.entity.NoteOperate;
 import com.mojota.succulent.utils.BusinessException;
-import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,8 +47,7 @@ public class NoteService {
     public void detailAdd(NoteDetail noteDetail) throws BusinessException {
         if (StringUtils.isEmpty(noteDetail.getContent()) && StringUtils.isEmpty
                 (noteDetail.getPicUrls())) {//若内容为空，则不写入明细表
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_EMPTY);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_EMPTY);
         }
         noteDetailRepository.save(noteDetail);
     }
@@ -59,13 +58,11 @@ public class NoteService {
     public void detailEdit(Long detailId, String content, String picUrls)
             throws BusinessException {
         if (detailId == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_DETAIL_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
         if (noteDetailRepository.updateDetailByDetailId(detailId, content,
                 picUrls) <= 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
     }
 
@@ -75,16 +72,13 @@ public class NoteService {
     public void noteTitleEdit(Long noteId, String noteTitle) throws
             BusinessException {
         if (noteId == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
         if (StringUtils.isEmpty(noteTitle)) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_EMPTY);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_EMPTY);
         }
         if (noteRepository.updateNoteTitleByNoteId(noteTitle, noteId) <= 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
     }
 
@@ -94,13 +88,11 @@ public class NoteService {
     public void notePermissionChange(Integer userId, Long noteId, int permission)
             throws BusinessException {
         if (noteId == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
         if (noteRepository.updatePermissionByNoteIdAndUserId(permission, noteId,
                 userId) <= 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
     }
 
@@ -126,8 +118,7 @@ public class NoteService {
 
         Note note = getNoteByNoteId(noteId);
         if (note == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
         int newCount = noteOperateRepository.countByNoteIdAndIsLikey(noteId, 1);
         note.setLikeyCount(newCount);
@@ -139,8 +130,7 @@ public class NoteService {
      */
     public void deleteNoteDetail(Long detailId) throws BusinessException {
         if (detailId == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_DETAIL_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
         noteDetailRepository.deleteById(detailId);
     }
@@ -151,8 +141,7 @@ public class NoteService {
     @Transactional(rollbackOn = Exception.class)
     public void deleteNote(Long noteId) throws BusinessException {
         if (noteId == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_NOTE_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
         // note表未做onetomany关联，故这里并别删除
         noteDetailRepository.deleteByNoteId(noteId); // 先删子表

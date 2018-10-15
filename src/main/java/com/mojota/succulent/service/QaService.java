@@ -9,7 +9,7 @@ import com.mojota.succulent.entity.Answer;
 import com.mojota.succulent.entity.AnswerOperate;
 import com.mojota.succulent.entity.Question;
 import com.mojota.succulent.utils.BusinessException;
-import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,8 +72,7 @@ public class QaService {
 
         Answer answer = answerRepository.findByAnswerId(answerId);
         if (answer == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
         int newUpCount = answerOperateRepository.countByAnswerIdAndIsUp(answerId, 1);
         answer.setUpCount(newUpCount);
@@ -85,16 +84,14 @@ public class QaService {
         // 先删回答表，再删问题表
         answerRepository.deleteByQuestionId(questionId);
         if (questionRepository.deleteByQuestionIdAndUserId(questionId, userId) <= 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
     }
 
     @Transactional(rollbackOn = Exception.class)
     public void deleteAnswer(Integer userId, Long answerId, Long questionId) throws BusinessException {
         if (answerRepository.deleteByAnswerIdAndUserId(answerId, userId) <= 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         } else {
             Question question = questionRepository.findByQuestionId(questionId);
             int answerCount = answerRepository.countByQuestionId(questionId);

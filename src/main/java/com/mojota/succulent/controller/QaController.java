@@ -7,8 +7,8 @@ import com.mojota.succulent.entity.Answer;
 import com.mojota.succulent.entity.Question;
 import com.mojota.succulent.service.QaService;
 import com.mojota.succulent.utils.BusinessException;
-import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.ResponseUtil;
+import com.mojota.succulent.utils.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -33,8 +33,7 @@ public class QaController {
     private void checkUser(Integer userId) throws BusinessException {
         // userId不可为空
         if (userId == null || userId == 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_ERROR_USER_NOT_LOGIN);
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_NOT_LOGIN);
         }
     }
 
@@ -128,8 +127,7 @@ public class QaController {
             BusinessException {
         checkUser(userId);
         if (answerId == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
         qaService.answerUp(userId, answerId, isUp);
         return ResponseUtil.success(null);

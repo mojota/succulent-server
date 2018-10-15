@@ -23,8 +23,7 @@ public class GlobalExceptionHandler {
                     (BusinessException) e).getMsg());
         } else {
             e.printStackTrace();
-            return ResponseUtil.failure(CodeConstants.CODE_SYSTEM_ERROR, e
-                    .getMessage());//系统错误
+            return ResponseUtil.failure(ResultEnum.SYSTEM_ERROR);//系统错误
         }
     }
 }

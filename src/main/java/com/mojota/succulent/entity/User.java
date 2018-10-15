@@ -2,8 +2,7 @@ package com.mojota.succulent.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.GlobalConstants;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -29,13 +28,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int userId;//用户id
 
-    @NotEmpty(message = CodeConstants.MSG_BUSINESS_ERROR_USER_EMPTY)
-    @Email(message = CodeConstants.MSG_BUSINESS_ERROR_EMAIL_FORMAT_INCORRECT)
+    @NotEmpty(message = GlobalConstants.MSG_BUSINESS_ERROR_USER_EMPTY)
+    @Email(message = GlobalConstants.MSG_BUSINESS_ERROR_EMAIL_FORMAT_INCORRECT)
     @Column(nullable = false, unique = true, length = 100)
     String userName; //用户名
 
-    @NotEmpty(message = CodeConstants.MSG_BUSINESS_ERROR_PWD_EMPTY)
-    @Length(min = 6, message = CodeConstants.MSG_BUSINESS_ERROR_PWD_SHORT)
+    @NotEmpty(message = GlobalConstants.MSG_BUSINESS_ERROR_PWD_EMPTY)
+    @Length(min = 6, message = GlobalConstants.MSG_BUSINESS_ERROR_PWD_SHORT)
     @Column(nullable = false, length = 20)
     @JsonIgnore
     String password; //密码

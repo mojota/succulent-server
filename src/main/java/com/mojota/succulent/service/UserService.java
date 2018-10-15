@@ -3,10 +3,9 @@ package com.mojota.succulent.service;
 import com.mojota.succulent.dao.UserRepository;
 import com.mojota.succulent.entity.User;
 import com.mojota.succulent.utils.BusinessException;
-import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.ResultEnum;
 import com.mojota.succulent.utils.ToolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,8 +25,7 @@ public class UserService {
     public User register(User user) throws BusinessException {
         // userName不可重复
         if (userRepository.countUserByUserName(user.getUserName()) > 0) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_ERROR_USER_REPEAT);
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_REPEAT);
         } else {
             return userRepository.save(user);
         }
@@ -40,8 +38,7 @@ public class UserService {
         User user = userRepository.findUserByUserNameAndPassword(userName,
                 passwordMd5);
         if (user == null) {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_ERROR_USER_WRONG);
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_WRONG);
         } else {
             return user;
         }
@@ -79,8 +76,7 @@ public class UserService {
         if (userRepository.updateAvatarByUserId(avatarUrl, userId) > 0) {
             return;
         } else {
-            throw new BusinessException(CodeConstants.CODE_BUSINESS_ERROR,
-                    CodeConstants.MSG_BUSINESS_DATA_NOT_FOUND);
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
     }
 
