@@ -96,6 +96,7 @@ public class NoteController {
             //若note为空，则不写入明细表
             throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
+        note.setPicUrls(picUrls);
         note.setUpdateTime(time);
         NoteDetail noteDetail = new NoteDetail();
         noteDetail.setNote(note);
@@ -154,10 +155,11 @@ public class NoteController {
 
     @PostMapping(value = "/deleteNoteDetail")
     public ResponseInfo deleteNoteDetail(@RequestParam Integer userId,
-                                         @RequestParam Long detailId) throws
+                                         @RequestParam Long detailId,
+                                         @RequestParam Long noteId) throws
             BusinessException {
         checkUser(userId);
-        noteService.deleteNoteDetail(detailId);
+        noteService.deleteNoteDetail(detailId, noteId);
         return ResponseUtil.success(null);
     }
 
@@ -215,14 +217,8 @@ public class NoteController {
     public ResponseInfo getDiaryDetails(@RequestParam Long noteId,
                                         @RequestParam(required = false) Long
                                                 createTime,
-                                        @PageableDefault(page = 0, size = 1) Pageable
+                                        @PageableDefault(page = 0, size = 1000) Pageable
                                                 pageable) {
-        if (createTime == null) {
-            createTime = System.currentTimeMillis();
-        }
-        if (pageable.getPageSize() == 1) { // 如果不传size，就取全部
-            pageable = null;
-        }
         List<NoteDetail> diarys = noteService.getDetails(noteId, createTime,
                 pageable);
         return ResponseUtil.success(diarys, pageable);

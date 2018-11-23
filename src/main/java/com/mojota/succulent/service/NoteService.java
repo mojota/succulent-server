@@ -10,6 +10,7 @@ import com.mojota.succulent.entity.NoteOperate;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -127,12 +128,25 @@ public class NoteService {
 
     /**
      * 删除笔记条目
+     *
      */
-    public void deleteNoteDetail(Long detailId) throws BusinessException {
+    public void deleteNoteDetail(Long detailId, Long noteId) throws BusinessException {
         if (detailId == null) {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
         noteDetailRepository.deleteById(detailId);
+        // 以下即使出错也不回滚了,没什么必要
+        List<NoteDetail> details = getDetails(noteId, null, new PageRequest(0, 1));
+        if (details != null && details.size()>0) {
+            String lastPicUrls = details.get(0).getPicUrls();
+
+            Note note = getNoteByNoteId(noteId);
+            if (note == null) {
+                return;
+            }
+            note.setPicUrls(lastPicUrls);
+            noteRepository.saveAndFlush(note);
+        }
     }
 
     /**
@@ -170,6 +184,12 @@ public class NoteService {
 
     public List<NoteDetail> getDetails(Long noteId, Long createTime, Pageable
             pageable) {
+        if (createTime == null) {
+            createTime = System.currentTimeMillis();
+        }
+        if (pageable.getPageSize() == 1000) { // 如果不传size，就取全部,1000为controller设置的默认值
+            pageable = null;
+        }
         return noteDetailRepository
                 .findByCreateTimeBeforeAndNote_NoteIdOrderByCreateTimeDesc
                         (createTime, noteId, pageable);
