@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,6 +35,9 @@ public class NoteService {
 
     @Autowired
     private NoteOperateRepository noteOperateRepository;
+
+    @Autowired
+    private OssService OssService;
 
     /**
      * 添加笔记
@@ -134,8 +139,21 @@ public class NoteService {
         if (detailId == null) {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
-        noteDetailRepository.deleteById(detailId);
+        List<String> objectKeys = null;
+        NoteDetail noteDetail = noteDetailRepository.findByDetailId(detailId);
+        if (noteDetail != null) {
+            // 先获取图片key
+            if (!StringUtils.isEmpty(noteDetail.getPicUrls())) {
+                objectKeys = Arrays.asList(noteDetail.getPicUrls().split(";"));
+            }
+            // 再删除
+            noteDetailRepository.deleteById(detailId);
+        }
         // 以下即使出错也不回滚了,没什么必要
+        // 删除oss中的对应图片们
+        OssService.deleteObjectByKeys(objectKeys);
+
+        // 将最新item的图片url更新到note表中
         List<NoteDetail> details = getDetails(noteId, null, new PageRequest(0, 1));
         if (details != null && details.size()>0) {
             String lastPicUrls = details.get(0).getPicUrls();
@@ -157,9 +175,22 @@ public class NoteService {
         if (noteId == null) {
             throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
+
+        // 先获取子表中所有图片key
+        List<String> objectKeys = new ArrayList<String>();
+        List<NoteDetail> noteDetails = noteDetailRepository.findByNote_NoteId(noteId);
+        for (NoteDetail noteDetail :noteDetails) {
+            if (!StringUtils.isEmpty(noteDetail.getPicUrls())) {
+                List<String> picUrls = Arrays.asList(noteDetail.getPicUrls().split(";"));
+                objectKeys.addAll(picUrls);
+            }
+        }
         // note表未做onetomany关联，故这里并别删除
-        noteDetailRepository.deleteByNoteId(noteId); // 先删子表
+        noteDetailRepository.deleteByNote_NoteId(noteId); // 先删子表
         noteRepository.deleteById(noteId);// 再删主表
+        noteOperateRepository.deleteByNoteId(noteId); // 删赞相关记录
+        // 删除oss中的对应图片们
+        OssService.deleteObjectByKeys(objectKeys);
     }
 
     public Note getNoteByNoteId(Long noteId) {

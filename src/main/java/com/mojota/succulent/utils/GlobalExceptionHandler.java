@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler()
     ResponseInfo handleException(Exception e) {
+        e.printStackTrace();
         if (e instanceof CustomException) {
             return ResponseUtil.failure(((CustomException) e).getCode(), e
                     .getMessage());
@@ -22,7 +23,6 @@ public class GlobalExceptionHandler {
             return ResponseUtil.failure(((BusinessException) e).getCode(), (
                     (BusinessException) e).getMsg());
         } else {
-            e.printStackTrace();
             return ResponseUtil.failure(ResultEnum.SYSTEM_ERROR);//系统错误
         }
     }

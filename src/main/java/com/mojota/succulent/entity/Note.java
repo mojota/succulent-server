@@ -3,7 +3,6 @@ package com.mojota.succulent.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * 笔记

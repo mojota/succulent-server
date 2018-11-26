@@ -23,13 +23,15 @@ public interface NoteDetailRepository extends JpaRepository<NoteDetail, Long> {
     int updateDetailByDetailId(@Param("detailId") Long detailId, @Param
             ("content") String content, @Param("picUrls") String picUrls);
 
-    // 原生sql方式
     @Modifying
-    @Query(value = "delete from note_detail where note_id =?1", nativeQuery = true)
-    void deleteByNoteId(Long noteId);
+    void deleteByNote_NoteId(Long noteId);
 
     List<NoteDetail> findByCreateTimeBeforeAndNote_NoteIdOrderByCreateTimeDesc
             (Long createTime, Long noteId, Pageable pageable);
+
+    List<NoteDetail> findByNote_NoteId(Long noteId);
+
+    NoteDetail findByDetailId(Long detailId);
 
 
 }

@@ -21,4 +21,6 @@ public interface NoteOperateRepository extends JpaRepository<NoteOperate, Long> 
     NoteOperate findNoteOperateByUserIdAndNoteId(Integer userId, Long noteId);
 
     int countByNoteIdAndIsLikey(Long noteId, Integer isLikey);
+
+    void deleteByNoteId(Long noteId);
 }
