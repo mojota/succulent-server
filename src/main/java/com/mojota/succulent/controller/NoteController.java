@@ -5,9 +5,11 @@ import com.mojota.succulent.dto.ResponseInfo;
 import com.mojota.succulent.entity.Note;
 import com.mojota.succulent.entity.NoteDetail;
 import com.mojota.succulent.service.NoteService;
+import com.mojota.succulent.service.OssService;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.ResponseUtil;
 import com.mojota.succulent.utils.ResultEnum;
+import com.mojota.succulent.utils.ToolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,6 +31,9 @@ public class NoteController {
 
     @Autowired
     private NoteService noteService;
+
+    @Autowired
+    private OssService ossService;
 
     private void checkUser(Integer userId) throws BusinessException {
         // userId不可为空
@@ -52,7 +57,7 @@ public class NoteController {
         note.setNoteType(noteType);
         note.setPicUrls(picUrls);
         note.setUpdateTime(time);
-        noteService.noteAdd(note);
+        noteService.saveNote(note);
 
         return ResponseUtil.success(null);
     }
@@ -109,12 +114,23 @@ public class NoteController {
 
     @PostMapping(value = "/diaryDetailEdit")
     public ResponseInfo diaryDetailEdit(@RequestParam Integer userId,
-                                        @RequestParam Long detailId, @RequestParam
-                                                String content, @RequestParam
-                                                String picUrls) throws
+                                        @RequestParam Long detailId,
+                                        @RequestParam Long noteId,
+                                        @RequestParam String content,
+                                        @RequestParam String picUrls) throws
             BusinessException {
         checkUser(userId);
-
+        Note note = noteService.getNoteByNoteId(noteId);
+        if (note == null) {
+            //若note为空，则不写入明细表
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
+        }
+        // 删除oss中的对应图片们
+        List<String> objectKeys = ToolUtil.getStringList(note.getPicUrls(), ";");
+        ossService.deleteObjectByKeys(objectKeys);
+        // 设置新的图片地址们
+        note.setPicUrls(picUrls);
+        noteService.saveNote(note);
         noteService.detailEdit(detailId, content, picUrls);
         return ResponseUtil.success(null);
     }

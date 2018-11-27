@@ -3,6 +3,8 @@ package com.mojota.succulent.utils;
 import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author jamie
@@ -39,5 +41,16 @@ public class ToolUtil {
             return encodeMd5(str).substring(8, 24);
         }
         return "";
+    }
+
+
+    /**
+     * 字符串分隔后的数组
+     */
+    public static List<String> getStringList(String str, String separator) {
+        if (!StringUtils.isEmpty(str)) {
+            return Arrays.asList(str.split(separator));
+        }
+        return null;
     }
 }

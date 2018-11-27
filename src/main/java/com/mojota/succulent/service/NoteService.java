@@ -9,6 +9,7 @@ import com.mojota.succulent.entity.NoteDetail;
 import com.mojota.succulent.entity.NoteOperate;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.ResultEnum;
+import com.mojota.succulent.utils.ToolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,8 +44,8 @@ public class NoteService {
      * 添加笔记
      */
 
-    public void noteAdd(Note note) throws BusinessException {
-        noteRepository.save(note);
+    public void saveNote(Note note) throws BusinessException {
+        noteRepository.saveAndFlush(note);
     }
 
     /**
@@ -144,7 +145,7 @@ public class NoteService {
         if (noteDetail != null) {
             // 先获取图片key
             if (!StringUtils.isEmpty(noteDetail.getPicUrls())) {
-                objectKeys = Arrays.asList(noteDetail.getPicUrls().split(";"));
+                objectKeys = ToolUtil.getStringList(noteDetail.getPicUrls(), ";");
             }
             // 再删除
             noteDetailRepository.deleteById(detailId);
@@ -181,7 +182,7 @@ public class NoteService {
         List<NoteDetail> noteDetails = noteDetailRepository.findByNote_NoteId(noteId);
         for (NoteDetail noteDetail :noteDetails) {
             if (!StringUtils.isEmpty(noteDetail.getPicUrls())) {
-                List<String> picUrls = Arrays.asList(noteDetail.getPicUrls().split(";"));
+                List<String> picUrls = ToolUtil.getStringList(noteDetail.getPicUrls(), ";");
                 objectKeys.addAll(picUrls);
             }
         }
