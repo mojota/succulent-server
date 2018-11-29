@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -127,7 +128,16 @@ public class NoteController {
         }
         // 删除oss中的对应图片们
         List<String> objectKeys = ToolUtil.getStringList(note.getPicUrls(), ";");
-        ossService.deleteObjectByKeys(objectKeys);
+        List<String> newPicUrls = ToolUtil.getStringList(picUrls, ";");
+        if (objectKeys != null && newPicUrls != null && newPicUrls.size() > 0) {
+            ArrayList<String> deleteKeys = new ArrayList<String>();//要删除的图片key
+            for (int i = 0; i<objectKeys.size();i++){
+                if (!newPicUrls.contains(objectKeys.get(i))){//如果新的图片中没有，则可以删除
+                    deleteKeys.add(objectKeys.get(i));
+                }
+            }
+            ossService.deleteObjectByKeys(deleteKeys);
+        }
         // 设置新的图片地址们
         note.setPicUrls(picUrls);
         noteService.saveNote(note);
