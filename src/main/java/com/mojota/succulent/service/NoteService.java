@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -186,6 +185,13 @@ public class NoteService {
                 objectKeys.addAll(picUrls);
             }
         }
+        // 造景笔记无子表，故获取主表中所有图片key
+        Note note = noteRepository.findNoteByNoteId(noteId);
+        if (!StringUtils.isEmpty(note.getPicUrls())) {
+            List<String> picUrls = ToolUtil.getStringList(note.getPicUrls(), ";");
+            objectKeys.addAll(picUrls);
+        }
+
         // note表未做onetomany关联，故这里并别删除
         noteDetailRepository.deleteByNote_NoteId(noteId); // 先删子表
         noteRepository.deleteById(noteId);// 再删主表
