@@ -37,7 +37,7 @@ public class NoteService {
     private NoteOperateRepository noteOperateRepository;
 
     @Autowired
-    private OssService OssService;
+    private OssService ossService;
 
     /**
      * 添加笔记
@@ -151,7 +151,7 @@ public class NoteService {
         }
         // 以下即使出错也不回滚了,没什么必要
         // 删除oss中的对应图片们
-        OssService.deleteObjectByKeys(objectKeys);
+        ossService.deleteObjectByKeys(objectKeys);
 
         // 将最新item的图片url更新到note表中
         List<NoteDetail> details = getDetails(noteId, null, new PageRequest(0, 1));
@@ -197,7 +197,7 @@ public class NoteService {
         noteRepository.deleteById(noteId);// 再删主表
         noteOperateRepository.deleteByNoteId(noteId); // 删赞相关记录
         // 删除oss中的对应图片们
-        OssService.deleteObjectByKeys(objectKeys);
+        ossService.deleteObjectByKeys(objectKeys);
     }
 
     public Note getNoteByNoteId(Long noteId) {

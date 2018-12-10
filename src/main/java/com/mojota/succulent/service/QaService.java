@@ -13,8 +13,10 @@ import com.mojota.succulent.utils.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +34,9 @@ public class QaService {
 
     @Autowired
     private AnswerOperateRepository answerOperateRepository;
+
+    @Autowired
+    private OssService ossService;
 
     public void qaAdd(Question question) {
         questionRepository.save(question);
@@ -81,11 +86,22 @@ public class QaService {
 
     @Transactional(rollbackOn = Exception.class)
     public void deleteQuestion(Integer userId, Long questionId) throws BusinessException {
+
+
+        List<String> objectKeys = new ArrayList<String>();
+        Question question = questionRepository.findByQuestionId(questionId);
+        if (question != null && !StringUtils.isEmpty(question.getQuestionPicUrl())){
+            objectKeys.add(question.getQuestionPicUrl());
+        }
+
         // 先删回答表，再删问题表
         answerRepository.deleteByQuestionId(questionId);
         if (questionRepository.deleteByQuestionIdAndUserId(questionId, userId) <= 0) {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
+
+        // 删除oss中的对应图片
+        ossService.deleteObjectByKeys(objectKeys);
     }
 
     @Transactional(rollbackOn = Exception.class)
