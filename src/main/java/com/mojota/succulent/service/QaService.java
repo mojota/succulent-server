@@ -87,7 +87,7 @@ public class QaService {
     @Transactional(rollbackOn = Exception.class)
     public void deleteQuestion(Integer userId, Long questionId) throws BusinessException {
 
-
+        // 获取问题表中图片key
         List<String> objectKeys = new ArrayList<String>();
         Question question = questionRepository.findByQuestionId(questionId);
         if (question != null && !StringUtils.isEmpty(question.getQuestionPicUrl())){

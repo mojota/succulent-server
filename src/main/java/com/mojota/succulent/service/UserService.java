@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author jamie
  * @date 18-1-23
@@ -18,6 +21,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OssService ossService;
 
     /**
      * 注册用户
@@ -73,11 +79,20 @@ public class UserService {
      */
     public void editAvatarUrl(int userId, String avatarUrl) throws
             BusinessException {
+        // 获取用户表中图片key
+        List<String> objectKeys = new ArrayList<String>();
+        User user = userRepository.findUserByUserId(userId);
+        if (user != null && !StringUtils.isEmpty(user.getAvatarUrl())){
+            objectKeys.add(user.getAvatarUrl());
+        }
+
         if (userRepository.updateAvatarByUserId(avatarUrl, userId) > 0) {
-            return;
+            // 删除oss中的对应图片
+            ossService.deleteObjectByKeys(objectKeys);
         } else {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
+
     }
 
 //    public List<User> getUsers() {
