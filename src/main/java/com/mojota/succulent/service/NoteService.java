@@ -215,9 +215,17 @@ public class NoteService {
     /**
      * 查询已公开的笔记
      */
-    public List<NoteDTO> getMoments(Integer userId, Long updateTime, Pageable
+    public List<NoteDTO> getMoments(Integer loginUserId, Long updateTime, Pageable
             pageable) {
-        return noteRepository.findMoments(userId, updateTime, pageable);
+        return noteRepository.findMoments(loginUserId, updateTime, pageable);
+    }
+
+    /**
+     * 查询某用户已公开的笔记
+     */
+    public List<NoteDTO> getUserMoments(Integer loginUserId, Integer userId,
+                                        Long updateTime, Pageable pageable) {
+        return noteRepository.findUserMoments(loginUserId, userId, updateTime, pageable);
     }
 
     public List<NoteDetail> getDetails(Long noteId, Long createTime, Pageable

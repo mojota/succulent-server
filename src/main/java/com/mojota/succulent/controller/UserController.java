@@ -86,4 +86,19 @@ public class UserController {
         userService.editAvatarUrl(userId, avatarUrl);
         return ResponseUtil.success(null);
     }
+
+
+    /**
+     * 修改moments封面地址
+     *
+     * @param userId
+     * @param coverUrl
+     * @return
+     */
+    @PostMapping(value = "/editCover")
+    public ResponseInfo editCoverUrl(@RequestParam int userId, @RequestParam
+            String coverUrl) throws BusinessException {
+        userService.editCoverUrl(userId, coverUrl);
+        return ResponseUtil.success(null);
+    }
 }

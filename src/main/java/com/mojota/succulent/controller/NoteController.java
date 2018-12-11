@@ -223,7 +223,7 @@ public class NoteController {
     }
 
     @PostMapping(value = "/getMoments")
-    public ResponseInfo getMoments(@RequestParam Integer userId,
+    public ResponseInfo getMoments(@RequestParam Integer loginUserId,
                                    @RequestParam(required = false) Long updateTime,
                                    @PageableDefault(page = 0, size = 1) Pageable
                                            pageable) {
@@ -235,9 +235,30 @@ public class NoteController {
             pageable = null;
         }
 
-        List<NoteDTO> list = noteService.getMoments(userId, updateTime, pageable);
+        List<NoteDTO> list = noteService.getMoments(loginUserId, updateTime, pageable);
         return ResponseUtil.success(list, pageable);
     }
+
+
+    @PostMapping(value = "/getUserMoments")
+    public ResponseInfo getUserMoments(@RequestParam Integer loginUserId,
+                                   @RequestParam Integer userId,
+                                   @RequestParam(required = false) Long updateTime,
+                                   @PageableDefault(page = 0, size = 1) Pageable
+                                           pageable) {
+
+        if (updateTime == null) {
+            updateTime = System.currentTimeMillis();
+        }
+        if (pageable.getPageSize() == 1) { // 如果不传size，就取全部
+            pageable = null;
+        }
+
+        List<NoteDTO> list = noteService.getUserMoments(loginUserId, userId, updateTime
+                , pageable);
+        return ResponseUtil.success(list, pageable);
+    }
+
 
     @PostMapping(value = "/getDiaryDetails")
     public ResponseInfo getDiaryDetails(@RequestParam Long noteId,

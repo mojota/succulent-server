@@ -57,5 +57,16 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             ".userId left join NoteOperate no on n.noteId=no.noteId and no.userId " +
             "= ?1 where n.permission = 1 and n.updateTime <?2 order by n" +
             ".updateTime desc")
-    List<NoteDTO> findMoments(Integer userId, Long updateTime, Pageable pageable);
+    List<NoteDTO> findMoments(Integer loginUserId, Long updateTime, Pageable pageable);
+
+    @Query("select n.noteId as noteId, n.noteTitle as noteTitle, n.updateTime as " +
+            "updateTime,n.permission as permission,n.likeyCount as likeyCount" +
+            ",n.noteType as noteType,n.picUrls as picUrls,no.isLikey as " +
+            "isLikey,u as userInfo from Note n inner join User u on n.userId = u" +
+            ".userId left join NoteOperate no on n.noteId=no.noteId and no.userId " +
+            "= ?1 where n.permission = 1 and n.userId = ?2 and n.updateTime <?3 order by n" +
+            ".updateTime desc")
+    List<NoteDTO> findUserMoments(Integer loginUserId, Integer userId, Long updateTime,
+                                  Pageable pageable);
+
 }

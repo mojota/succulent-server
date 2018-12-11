@@ -92,7 +92,30 @@ public class UserService {
         } else {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
+    }
 
+
+    /**
+     * 修改moments封面
+     *
+     * @param userId
+     * @param coverUrl
+     */
+    public void editCoverUrl(int userId, String coverUrl) throws
+            BusinessException {
+        // 获取用户表中图片key
+        List<String> objectKeys = new ArrayList<String>();
+        User user = userRepository.findUserByUserId(userId);
+        if (user != null && !StringUtils.isEmpty(user.getCoverUrl())){
+            objectKeys.add(user.getCoverUrl());
+        }
+
+        if (userRepository.updateCoverByUserId(coverUrl, userId) > 0) {
+            // 删除oss中的对应图片
+            ossService.deleteObjectByKeys(objectKeys);
+        } else {
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
+        }
     }
 
 //    public List<User> getUsers() {
