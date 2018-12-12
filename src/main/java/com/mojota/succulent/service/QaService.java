@@ -62,7 +62,7 @@ public class QaService {
                 pageable);
     }
 
-    public void answerUp(Integer userId, Long answerId, Integer isUp) throws BusinessException {
+    public void answerUp(Integer userId, Long answerId, Long questionId, Integer isUp) throws BusinessException {
         AnswerOperate answerOperate =
                 answerOperateRepository.findByUserIdAndAnswerId(userId, answerId);
         if (answerOperate != null) {
@@ -71,6 +71,7 @@ public class QaService {
             answerOperate = new AnswerOperate();
             answerOperate.setUserId(userId);
             answerOperate.setAnswerId(answerId);
+            answerOperate.setQuestionId(questionId);
             answerOperate.setIsUp(isUp);
         }
         answerOperateRepository.saveAndFlush(answerOperate);
@@ -100,6 +101,7 @@ public class QaService {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
 
+        answerOperateRepository.deleteByQuestionId(questionId); // 删顶相关记录
         // 删除oss中的对应图片
         ossService.deleteObjectByKeys(objectKeys);
     }
@@ -113,6 +115,7 @@ public class QaService {
             int answerCount = answerRepository.countByQuestionId(questionId);
             question.setAnswerCount(answerCount);
             questionRepository.saveAndFlush(question);
+            answerOperateRepository.deleteByAnswerId(answerId); // 删顶相关记录
         }
     }
 }

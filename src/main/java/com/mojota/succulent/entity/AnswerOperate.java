@@ -23,6 +23,9 @@ public class AnswerOperate {
     Long answerId;
 
     @Column(nullable = false)
+    Long questionId; // 问题id;
+
+    @Column(nullable = false)
     Integer userId;
 
     @Column(nullable = false, columnDefinition = "int default 0")
@@ -42,6 +45,14 @@ public class AnswerOperate {
 
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
+    }
+
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 
     public Integer getUserId() {

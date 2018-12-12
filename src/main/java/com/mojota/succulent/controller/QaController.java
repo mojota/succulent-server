@@ -122,14 +122,14 @@ public class QaController {
      */
     @PostMapping(value = "/answerUp")
     public ResponseInfo answerUp(@RequestParam Integer userId,
-                                 @RequestParam Long answerId, @RequestParam
-                                         Integer isUp) throws
-            BusinessException {
+                                 @RequestParam Long answerId,
+                                 @RequestParam Long questionId, @RequestParam
+                                         Integer isUp) throws BusinessException {
         checkUser(userId);
         if (answerId == null) {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
-        qaService.answerUp(userId, answerId, isUp);
+        qaService.answerUp(userId, answerId, questionId, isUp);
         return ResponseUtil.success(null);
     }
 

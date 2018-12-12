@@ -12,4 +12,8 @@ public interface AnswerOperateRepository extends JpaRepository<AnswerOperate, Lo
     AnswerOperate findByUserIdAndAnswerId(Integer userId, Long answerId);
 
     int countByAnswerIdAndIsUp(Long answerId, Integer isUp);
+
+    void deleteByAnswerId(Long answerId);
+
+    void deleteByQuestionId(Long questionId);
 }
