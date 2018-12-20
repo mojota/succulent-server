@@ -56,18 +56,12 @@ public class UserService {
      * @param userId
      * @param nickname
      * @param region
-     * @param password
      * @return
      */
-    public User edit(int userId, String nickname, String region, String password)
-            throws Exception {
+    public User edit(int userId, String nickname, String region) {
         User user = userRepository.findUserByUserId(userId);
         user.setNickname(nickname);
         user.setRegion(region);
-        if (!StringUtils.isEmpty(password)) {
-            String passwordMd5 = ToolUtil.encode16bitMd5(password);
-            user.setPassword(passwordMd5);
-        }
         return userRepository.saveAndFlush(user);
     }
 
@@ -118,11 +112,16 @@ public class UserService {
         }
     }
 
-//    public List<User> getUsers() {
-//        return userMapper.getUsers();
-//    }
+    /**
+     * 重置密码
+     *
+     * @param userName
+     * @param passwordMd5
+     */
+    public void resetPwd(String userName, String passwordMd5) throws BusinessException {
+        if (userRepository.updatePasswordByUserName(passwordMd5, userName) <= 0) {
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_RESET);
+        }
+    }
 
-//    public User getUser(String username) {
-//        return userMapper.getUser(username);
-//    }
 }

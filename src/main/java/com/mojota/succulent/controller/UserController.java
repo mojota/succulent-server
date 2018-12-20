@@ -38,6 +38,13 @@ public class UserController {
             throw new BusinessException(ResultEnum.BUSINESS_ERROR.getCode(),
                     bindingResult.getFieldError().getDefaultMessage());
         }
+
+        if (StringUtils.isEmpty(user.getPassword())){
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_EMPTY);
+        }
+        if (!StringUtils.isEmpty(user.getPassword()) && user.getPassword().length() < 6) {
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_SHORT);
+        }
         user.setPassword(ToolUtil.encode16bitMd5(user.getPassword()));//密码加密
         user.setEmail(user.getUserName());
         return ResponseUtil.success(userService.register(user));
@@ -54,22 +61,36 @@ public class UserController {
     }
 
     /**
+     * 重置密码
+     */
+    @PostMapping(value = "/resetPwd")
+    public ResponseInfo resetPwd(@RequestParam String userName, @RequestParam
+            String password, @RequestParam String tempCode) throws Exception {
+
+        if (StringUtils.isEmpty(password)){
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_EMPTY);
+        }
+        if (!StringUtils.isEmpty(password) && password.length() < 6) {
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_SHORT);
+        }
+        String passwordMd5 = ToolUtil.encode16bitMd5(password);
+        userService.resetPwd(userName, passwordMd5);
+
+        return ResponseUtil.success(null);
+    }
+
+    /**
      * 修改用户信息
      *
      * @param userId
      * @param nickname
      * @param region
-     * @param password
      * @return
      */
     @PostMapping(value = "/edit")
     public ResponseInfo<User> edit(@RequestParam int userId, @RequestParam
-            String nickname, @RequestParam String region, @RequestParam(required =
-            false) String password) throws Exception {
-        if (!StringUtils.isEmpty(password) && password.length() < 6) {
-            throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_SHORT);
-        }
-        User user = userService.edit(userId, nickname, region, password);
+            String nickname, @RequestParam String region) throws Exception {
+        User user = userService.edit(userId, nickname, region);
         return ResponseUtil.success(user);
     }
 
