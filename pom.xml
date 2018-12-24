@@ -45,7 +45,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--oss-->
+		<!--阿里oss-->
 		<dependency>
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-sts</artifactId>
@@ -54,12 +54,18 @@
 		<dependency>
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-core</artifactId>
-			<version>3.5.0</version>
+			<version>4.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun.oss</groupId>
 			<artifactId>aliyun-sdk-oss</artifactId>
 			<version>3.3.0</version>
+		</dependency>
+		<!--阿里邮件推送-->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dm</artifactId>
+			<version>3.3.1</version>
 		</dependency>
 	</dependencies>
 

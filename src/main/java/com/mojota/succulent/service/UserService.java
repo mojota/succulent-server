@@ -120,8 +120,14 @@ public class UserService {
      */
     public void resetPwd(String userName, String passwordMd5) throws BusinessException {
         if (userRepository.updatePasswordByUserName(passwordMd5, userName) <= 0) {
-            throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_RESET);
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_NOT_EXIST);
         }
     }
 
+    /**
+     * 检查用户是否存在
+     */
+    public boolean isUserExist(String userName) {
+        return (userRepository.countUserByUserName(userName) > 0);
+    }
 }

@@ -55,6 +55,9 @@ public class User {
 
     String coverUrl; // 封面图url
 
+    @Column
+    Long registerTime; // 注册时间
+
     public int getUserId() {
         return userId;
     }
@@ -125,5 +128,13 @@ public class User {
 
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
+    }
+
+    public Long getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(Long registerTime) {
+        this.registerTime = registerTime;
     }
 }

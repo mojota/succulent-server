@@ -1,7 +1,10 @@
 package com.mojota.succulent.controller;
 
+import com.mojota.succulent.dao.TempCodeRepository;
 import com.mojota.succulent.dto.ResponseInfo;
+import com.mojota.succulent.entity.TempCodeInfo;
 import com.mojota.succulent.entity.User;
+import com.mojota.succulent.service.SendEmailService;
 import com.mojota.succulent.service.UserService;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.ResponseUtil;
@@ -28,6 +31,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SendEmailService sendEmailService;
+
+    @Autowired
+    private TempCodeRepository tempCodeRepository;
+
     /**
      * 注册用户
      */
@@ -47,6 +56,7 @@ public class UserController {
         }
         user.setPassword(ToolUtil.encode16bitMd5(user.getPassword()));//密码加密
         user.setEmail(user.getUserName());
+        user.setRegisterTime(System.currentTimeMillis());
         return ResponseUtil.success(userService.register(user));
     }
 
@@ -73,9 +83,16 @@ public class UserController {
         if (!StringUtils.isEmpty(password) && password.length() < 6) {
             throw new BusinessException(ResultEnum.BUSINESS_ERROR_PWD_SHORT);
         }
+        // 验证码验证
+        TempCodeInfo tempCodeInfo = tempCodeRepository.findByUserName(userName);
+        if (!tempCode.equals(String.valueOf(tempCodeInfo.getCode()))){
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_CODE_INCORRECT);
+        }
+
         String passwordMd5 = ToolUtil.encode16bitMd5(password);
         userService.resetPwd(userName, passwordMd5);
 
+        tempCodeRepository.deleteById(userName);
         return ResponseUtil.success(null);
     }
 
@@ -120,6 +137,34 @@ public class UserController {
     public ResponseInfo editCoverUrl(@RequestParam int userId, @RequestParam
             String coverUrl) throws BusinessException {
         userService.editCoverUrl(userId, coverUrl);
+        return ResponseUtil.success(null);
+    }
+
+
+    /**
+     * 请求发送验证码
+     */
+    @PostMapping(value = "/sendCode")
+    public ResponseInfo sendCode(@RequestParam String userName) throws BusinessException {
+        if (StringUtils.isEmpty(userName)) {
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_EMPTY);
+        }
+
+        // 检查用户是否存在
+        if (!userService.isUserExist(userName)){
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_NOT_EXIST);
+        }
+
+        int code = ToolUtil.randomCode();
+        TempCodeInfo tempCodeInfo = new TempCodeInfo();
+        tempCodeInfo.setUserName(userName);
+        tempCodeInfo.setCode(code);
+        tempCodeInfo.setCreateTime(System.currentTimeMillis());
+        // 先保存到表中
+        tempCodeRepository.saveAndFlush(tempCodeInfo);
+        // 再发送邮件
+        sendEmailService.sendCode(userName, String.valueOf(code));
+
         return ResponseUtil.success(null);
     }
 }

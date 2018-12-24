@@ -5,6 +5,7 @@ import org.springframework.util.StringUtils;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author jamie
@@ -52,5 +53,15 @@ public class ToolUtil {
             return Arrays.asList(str.split(separator));
         }
         return null;
+    }
+
+
+    /**
+     * 生成4位随机码
+     */
+    public static Integer randomCode() {
+        Random random = new Random();
+        int code = random.nextInt(9000) + 1000;
+        return code;
     }
 }
