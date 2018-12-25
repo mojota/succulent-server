@@ -25,4 +25,5 @@ public class GlobalConstants {
     public static final String MSG_BUSINESS_ERROR_CODE_INCORRECT = "验证码不正确";
 
 
+    public static final String MSG_BUSINESS_CONTENT_TOO_LONG = "反馈内容不可以超过300字";
 }
