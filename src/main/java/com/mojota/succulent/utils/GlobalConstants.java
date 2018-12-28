@@ -19,6 +19,7 @@ public class GlobalConstants {
     public static final String MSG_BUSINESS_DATA_NOT_FOUND = "未找到条目";
     public static final String MSG_BUSINESS_NOTE_NOT_FOUND = "未找到笔记";
     public static final String MSG_BUSINESS_DATA_EMPTY = "提交内容为空";
+    public static final String MSG_BUSINESS_NOTE_TITLE_EMPTY = "笔记标题不能为空";
 
 
     public static final String MSG_BUSINESS_ERROR_SEND_CODE = "发送验证码失败";

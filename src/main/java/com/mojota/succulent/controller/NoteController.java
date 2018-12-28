@@ -13,6 +13,7 @@ import com.mojota.succulent.utils.ToolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -70,6 +71,10 @@ public class NoteController {
                                  @RequestParam String picUrls) throws
             BusinessException {
         checkUser(userId);
+        //若标题为空，则不写入笔记表
+        if (StringUtils.isEmpty(noteTitle)) {
+            throw new BusinessException(ResultEnum.BUSINESS_NOTE_TITLE_EMPTY);
+        }
 
         long time = System.currentTimeMillis();
         Note note = new Note();
@@ -79,13 +84,17 @@ public class NoteController {
         note.setPicUrls(picUrls);
         note.setUpdateTime(time);
 
-        NoteDetail noteDetail = new NoteDetail();
-        noteDetail.setNote(note);
-        noteDetail.setContent(content);
-        noteDetail.setPicUrls(picUrls);
-        noteDetail.setCreateTime(time);
-
-        noteService.detailAdd(noteDetail);
+        //若内容为空,则只写note表,不写入明细表
+        if (StringUtils.isEmpty(content) && StringUtils.isEmpty(picUrls)) {
+            noteService.saveNote(note);
+        } else {
+            NoteDetail noteDetail = new NoteDetail();
+            noteDetail.setNote(note);
+            noteDetail.setContent(content);
+            noteDetail.setPicUrls(picUrls);
+            noteDetail.setCreateTime(time);
+            noteService.detailAdd(noteDetail);
+        }
         return ResponseUtil.success(null);
     }
 
@@ -101,6 +110,10 @@ public class NoteController {
         if (note == null) {
             //若note为空，则不写入明细表
             throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
+        }
+        //若内容为空，则不写入明细表
+        if (StringUtils.isEmpty(content) && StringUtils.isEmpty(picUrls)) {
+            throw new BusinessException(ResultEnum.BUSINESS_DATA_EMPTY);
         }
         note.setPicUrls(picUrls);
         note.setUpdateTime(time);

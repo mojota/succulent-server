@@ -51,10 +51,6 @@ public class NoteService {
      * 添加笔记明细，更新note表时间
      */
     public void detailAdd(NoteDetail noteDetail) throws BusinessException {
-        if (StringUtils.isEmpty(noteDetail.getContent()) && StringUtils.isEmpty
-                (noteDetail.getPicUrls())) {//若内容为空，则不写入明细表
-            throw new BusinessException(ResultEnum.BUSINESS_DATA_EMPTY);
-        }
         noteDetailRepository.save(noteDetail);
     }
 
