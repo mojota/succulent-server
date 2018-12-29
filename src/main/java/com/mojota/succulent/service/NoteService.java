@@ -200,6 +200,12 @@ public class NoteService {
         return noteRepository.findNoteByNoteId(noteId);
     }
 
+
+    public NoteDetail getNoteDetailByDetailId(Long detailId) {
+        return noteDetailRepository.findByDetailId(detailId);
+
+    }
+
     /**
      * 按类型查询当前用户笔记
      */

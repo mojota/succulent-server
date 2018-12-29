@@ -139,8 +139,10 @@ public class NoteController {
             //若note为空，则不写入明细表
             throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
         }
+
+        NoteDetail noteDetail = noteService.getNoteDetailByDetailId(detailId);
         // 删除oss中的对应图片们
-        List<String> objectKeys = ToolUtil.getStringList(note.getPicUrls(), ";");
+        List<String> objectKeys = ToolUtil.getStringList(noteDetail.getPicUrls(), ";");
         List<String> newPicUrls = ToolUtil.getStringList(picUrls, ";");
         if (objectKeys != null && newPicUrls != null && newPicUrls.size() > 0) {
             ArrayList<String> deleteKeys = new ArrayList<String>();//要删除的图片key
