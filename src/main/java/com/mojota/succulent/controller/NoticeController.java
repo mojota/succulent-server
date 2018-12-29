@@ -7,6 +7,7 @@ import com.mojota.succulent.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ public class NoticeController {
             false) Long noticeTime, @PageableDefault(page = 0,
             size = 1) Pageable pageable) {
 
-        if (noticeTime == null) {
+        if (StringUtils.isEmpty(noticeTime) || noticeTime == 0) {
             noticeTime = System.currentTimeMillis();
         }
         if (pageable.getPageSize() == 1) { // 如果不传size，就取全部
