@@ -25,9 +25,10 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "update Note set noteTitle = :noteTitle where noteId = :noteId")
+    @Query(value = "update Note set noteTitle = :noteTitle where noteId = :noteId and " +
+            "userId = :userId")
     int updateNoteTitleByNoteId(@Param("noteTitle") String noteTitle, @Param
-            ("noteId") Long noteId);
+            ("noteId") Long noteId, @Param("userId") Integer userId);
 
     @Transactional
     @Modifying

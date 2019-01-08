@@ -166,7 +166,7 @@ public class NoteController {
                                               String noteTitle) throws
             BusinessException {
         checkUser(userId);
-        noteService.noteTitleEdit(noteId, noteTitle);
+        noteService.noteTitleEdit(userId, noteId, noteTitle);
         return ResponseUtil.success(null);
     }
 

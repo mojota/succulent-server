@@ -71,7 +71,7 @@ public class NoteService {
     /**
      * 编辑笔记标题
      */
-    public void noteTitleEdit(Long noteId, String noteTitle) throws
+    public void noteTitleEdit(Integer userId, Long noteId, String noteTitle) throws
             BusinessException {
         if (noteId == null) {
             throw new BusinessException(ResultEnum.BUSINESS_NOTE_NOT_FOUND);
@@ -79,7 +79,7 @@ public class NoteService {
         if (StringUtils.isEmpty(noteTitle)) {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_EMPTY);
         }
-        if (noteRepository.updateNoteTitleByNoteId(noteTitle, noteId) <= 0) {
+        if (noteRepository.updateNoteTitleByNoteId(noteTitle, noteId, userId) <= 0) {
             throw new BusinessException(ResultEnum.BUSINESS_DATA_NOT_FOUND);
         }
     }
