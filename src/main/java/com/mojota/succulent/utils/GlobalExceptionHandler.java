@@ -1,6 +1,8 @@
 package com.mojota.succulent.utils;
 
 import com.mojota.succulent.dto.ResponseInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,9 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler()
     ResponseInfo handleException(Exception e) {
         e.printStackTrace();
+        logger.error(e.getMessage());
         if (e instanceof CustomException) {
             return ResponseUtil.failure(((CustomException) e).getCode(), e
                     .getMessage());

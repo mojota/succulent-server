@@ -1,0 +1,1 @@
+nohup java -jar succulent.jar >/dev/null 2>nohup.out &
