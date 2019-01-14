@@ -19,15 +19,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler()
     ResponseInfo handleException(Exception e) {
-        e.printStackTrace();
-        logger.error(e.getMessage());
-        if (e instanceof CustomException) {
-            return ResponseUtil.failure(((CustomException) e).getCode(), e
-                    .getMessage());
-        } else if (e instanceof BusinessException) {
+//        e.printStackTrace();
+        StringBuffer stsb = new StringBuffer("异常堆栈:");
+        for (int i = 0; i < e.getStackTrace().length; i++) {
+            if (i <= 3) { //只打印最近3行
+                stsb.append("\n").append(e.getStackTrace()[i].toString());
+            }
+        }
+        logger.error(stsb.toString());
+        logger.error("错误描述:" + e.getLocalizedMessage());
+        if (e instanceof BusinessException) {
+            logger.error("BusinessException " + String.valueOf(((BusinessException) e).getCode()) + ":" + ((BusinessException) e).getMsg());
             return ResponseUtil.failure(((BusinessException) e).getCode(), (
                     (BusinessException) e).getMsg());
         } else {
+            logger.error("Exception " + ResultEnum.SYSTEM_ERROR.getCode() + ":" + ResultEnum.SYSTEM_ERROR.getMsg());
             return ResponseUtil.failure(ResultEnum.SYSTEM_ERROR);//系统错误
         }
     }

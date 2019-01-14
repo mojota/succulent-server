@@ -4,12 +4,14 @@ import com.mojota.succulent.dao.UserRepository;
 import com.mojota.succulent.entity.User;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.ResultEnum;
-import com.mojota.succulent.utils.ToolUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +27,9 @@ public class UserService {
     @Autowired
     private OssService ossService;
 
+    private static Logger logger = LoggerFactory.getLogger(UserService.class);
+
+
     /**
      * 注册用户
      */
@@ -33,6 +38,7 @@ public class UserService {
         if (userRepository.countUserByUserName(user.getUserName()) > 0) {
             throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_REPEAT);
         } else {
+            logger.info(user.getUserName()+"注册成功,"+new Date());
             return userRepository.save(user);
         }
     }

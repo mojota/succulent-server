@@ -12,6 +12,8 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,7 @@ public class OssService {
     @Value("${oss.roleArn}")
     private String mRoleArn;
 
+    private static Logger logger = LoggerFactory.getLogger(OssService.class);
     /**
      * 获取临时token
      */
@@ -100,16 +103,16 @@ public class OssService {
             DeleteObjectsResult deleteObjectsResult = ossClient.deleteObjects(request);
             List<String> deletedObjects = deleteObjectsResult.getDeletedObjects();
             if (deletedObjects != null && deletedObjects.size() > 0) {
-                System.out.println("以下文件删除失败：");
+                logger.error("以下文件删除失败：");
                 for (String object : deletedObjects) {
-                    System.out.println("\t" + object);
+                    logger.error("\t" + object);
                 }
             }
         } catch (OSSException oe) {
-            System.out.println("Error Message: " + oe.getErrorCode());
-            System.out.println("Error Code: " + oe.getErrorCode());
-            System.out.println("Request ID: " + oe.getRequestId());
-            System.out.println("Host ID: " + oe.getHostId());
+            logger.error("Error Message: " + oe.getErrorCode());
+            logger.error("Error Code: " + oe.getErrorCode());
+            logger.error("Request ID: " + oe.getRequestId());
+            logger.error("Host ID: " + oe.getHostId());
         } finally {
             ossClient.shutdown();
         }

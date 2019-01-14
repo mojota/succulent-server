@@ -9,6 +9,8 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.mojota.succulent.utils.BusinessException;
 import com.mojota.succulent.utils.ResultEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ public class SendEmailService {
 
     @Value("${email.accountName}")
     private String mAccountName; //阿里云控制台创建的发信地址
+
+    private static Logger logger = LoggerFactory.getLogger(SendEmailService.class);
 
     /**
      * 发送验证码
@@ -60,13 +64,11 @@ public class SendEmailService {
 //            request.setHtmlBody("邮件正文");
             request.setTextBody(content);
             SingleSendMailResponse httpResponse = client.getAcsResponse(request);
-            System.out.println("Request ID: " + httpResponse.getRequestId());
+            logger.info("Request ID: " + httpResponse.getRequestId());
         } catch (ServerException e) {
-            e.printStackTrace();
-            throw new BusinessException(ResultEnum.BUSINESS_ERROR_SEND_CODE);
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_SEND_CODE, e);
         } catch (ClientException e) {
-            e.printStackTrace();
-            throw new BusinessException(ResultEnum.BUSINESS_ERROR_SEND_CODE);
+            throw new BusinessException(ResultEnum.BUSINESS_ERROR_SEND_CODE, e);
         }
     }
 }

@@ -224,7 +224,6 @@ public class NoteController {
                                                                size = 1) Pageable
                                                                pageable)
             throws BusinessException {
-        checkUser(userId);
 
         if (updateTime == null) {
             updateTime = System.currentTimeMillis();
