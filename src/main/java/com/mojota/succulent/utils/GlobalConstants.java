@@ -25,6 +25,7 @@ public class GlobalConstants {
     public static final String MSG_BUSINESS_ERROR_SEND_CODE = "发送验证码失败";
     public static final String MSG_BUSINESS_ERROR_CODE_INCORRECT = "验证码不正确";
 
-
     public static final String MSG_BUSINESS_CONTENT_TOO_LONG = "反馈内容不可以超过300字";
+
+    public static final String MSG_BUSINESS_ERROR_SENSITIVE_WORDS = "您提交的内容含有敏感信息!";
 }

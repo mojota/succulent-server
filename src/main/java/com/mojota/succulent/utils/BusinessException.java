@@ -6,7 +6,7 @@ package com.mojota.succulent.utils;
  * @author jamie
  * @date 18-8-30
  */
-public class BusinessException extends Exception {
+public class BusinessException extends RuntimeException {
     int code;
     String msg;
 

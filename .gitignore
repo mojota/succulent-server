@@ -1,6 +1,7 @@
 *.properties
 
 /target/
+/log/
 .mvn/
 
 ### STS ###
