@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>多肉遇见你</title>
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="你的云上花园">
+    <meta property="og:image" content="">
+        <link rel="shortcut icon" href="images/succulentMU.png"/>
+    <link href="css/font.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/allTemplates.css">
+
+    <style>
+        .launchaco-promo {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            cursor: pointer;
+            width: 0;
+            height: 0;
+            z-index: 999999;
+        }
+
+        .launchaco-promo__active {
+            width: initial;
+            height: initial;
+        }
+
+        .launchaco-promo-speechbubble {
+            font-family: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
+            position: absolute;
+            left: 50px;
+            top: -11px;
+            padding: 9px;
+            color: white;
+            border-radius: 3px;
+            background: linear-gradient(#227ef7, #1290fc);
+            font-size: 14px;
+            font-weight: 600;
+            width: 93px;
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .15s ease-in-out;
+        }
+
+        .launchaco-promo__active:hover .launchaco-promo-speechbubble {
+            opacity: 1;
+        }
+
+        .launchaco-promo svg {
+            transition: all .3s ease-in-out;
+            opacity: 0;
+        }
+
+        .launchaco-promo__active svg {
+            opacity: 1;
+        }
+
+        .launchaco-promo-speechbubble:before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            transform: rotate(45deg);
+            left: -4px;
+            bottom: 10px;
+            border-radius: 3px;
+            background: #1290fc;
+            z-index: 2;
+            position: absolute
+        }
+
+        .launchaco-promo__active .launchaco-promo-speechbubble__animate {
+            animation: popinpopup 3s linear forwards 0.1s;
+        }
+
+        @keyframes popinpopup {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 3px, 0)
+            }
+
+            7%,
+            93% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0)
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate3d(0, -4px, 0)
+            }
+        }
+
+        .launchaco-promo-animate:hover {
+            opacity: 1 !important;
+        }
+    </style>
+
+
+    <style>
+        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 {
+            background-image: linear-gradient(#8AD646, #36A27C)
+        }
+
+        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .primary-color {
+            color: #FFFFFF
+        }
+
+        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .secondary-color {
+            color: #D7F9FF
+        }
+
+        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .accent-bg {
+            background-color: #339F7F
+        }
+
+        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .secondary-bg {
+            background-color: #339F7F
+        }
+
+        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .svg-fill {
+            fill: #FFFFFF
+        }
+    </style>
+</head>
+
+<body class="font-serious">
+<div class="green-white background background-white">
+    <div class="bg">
+        <div class="bg-image"
+             style="background-image: url(images/bg.jpg);"></div>
+        <span class="bg-author"
+              style="display: inline-block; color: white; padding: 2px 3px;">Photo by Yen Vu on Unsplash</span>
+    </div>
+    <header class="header">
+        <div class="container-lrg">
+            <div class="flex col-12 spread"><a
+                    class="logo primary-color launchaco-builder-hoverable logo">多肉遇见你</a>
+            </div>
+        </div>
+    </header>
+    <section class="section">
+        <div class="container-lrg flex">
+            <div class="col-6 flex flex-column center-vertical mobile-text-center mb40">
+                <h1 class="heading-lrg primary-color launchaco-builder-hoverable">
+                    你的云上花园</h1>
+                <h2 class="subheading secondary-color mt20 launchaco-builder-hoverable">
+                    记录多肉成长的每一刻！</h2>
+                <div class="mt40"><a
+                        href="https://play.google.com/store/apps/details?id=com.mojota.succulent"
+                        target="_blank"
+                        class="button mobile-text-center mt10 launchaco-builder-hoverable mr10 mobile-text-center accent-bg fill-white primary-color">
+                    <svg width="76" height="80" viewBox="0 0 76 80"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.175 79.25c1.879.334 4.098-.077 6.471-1.355l41.613-22.406-12.106-12.05L6.175 79.25zM2.083 3.555C1.044 5.034.446 7.069.446 9.576v61.031c0 2.442.566 4.436 1.553 5.902L38.69 39.991 2.083 3.555zM54.181 24.572L12.653 2.275C10.346 1.037 8.184.612 6.341.896l35.812 35.646 12.028-11.97zM58.757 53.068l12.016-6.471c6.711-3.612 6.707-9.517-.008-13.122l-12.082-6.487-13.065 13.003 13.139 13.077z"></path>
+                    </svg>
+                    <span> 去Google Play获取 </span></a><a
+                        href="http://crazysucculent.top:8098/download/succulentMU.apk"
+                        target="_blank"
+                        class="button mobile-text-center mt10 launchaco-builder-hoverable">
+                    <span> 点此直接下载Apk </span></a></div>
+            </div>
+            <div class="col-6 flex center-horizontal center-vertical">
+                <div class="launchaco-builder-hoverable">
+                    <div class=""><img src="images/qrcode.png" class="custom-img"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<section id="checklist-1"
+         class="section custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91"
+         sitemeta="[object Object]" activepage="Landing">
+    <div class="container-lrg flex">
+        <div class="col-6 flex flex-column center-vertical">
+            <h3 class="heading primary-color launchaco-builder-hoverable">
+                简单易用的多肉成长笔记APP</h3>
+            <p class="subheading secondary-color mt20 launchaco-builder-hoverable">
+                养了很久的一颗多肉，是否已忘记最初遇见它时的样子？用“多肉遇见你”记录下它成长的每个时刻，或随时翻看，或分享给他人，与多肉爱好者们一起享受养肉的乐趣！</p>
+            <ul class="checklist mt20"></ul>
+        </div>
+        <div class="col-6 flex center-horizontal center-vertical">
+            <div class="android2 launchaco-builder-hoverable">
+                <div class="mask"><img src="images/1.png" class="mask-img"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="feature-2" class="section green-gradient" sitemeta="[object Object]"
+         activepage="Landing">
+    <div class="container-lrg flex">
+        <div class="col-6 flex flex-column center-vertical">
+            <div class="flex mobile-flex-wrap mb20 mobile-text-center"><i
+                    class="icon secondary-bg mr20 mobile-center-icon launchaco-builder-hoverable">
+                <svg class="svg-fill" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 25 25">
+                    <path d="M12.5 0S5 10.75 5 17.5a7.5 7.5 0 0 0 15 0C20 10.75 12.5 0 12.5 0zm-5 15a.5.5 0 1 1-.5.5.5.5 0 0 1 .5-.5zm4.5 8a5.006 5.006 0 0 1-5-5 .5.5 0 0 1 1 0 4.004 4.004 0 0 0 4 4 .5.5 0 0 1 0 1z"></path>
+                </svg>
+            </i>
+                <div>
+                    <h3 class="bold primary-color launchaco-builder-hoverable">多肉成长记</h3>
+                    <p class="paragraph secondary-color launchaco-builder-hoverable">
+                        记录每一颗多肉的成长笔记，随时查看养护前后的变化
+                    </p>
+                </div>
+            </div>
+            <div class="flex mobile-flex-wrap mb20 mobile-text-center"><i
+                    class="icon secondary-bg mr20 mobile-center-icon launchaco-builder-hoverable">
+                <svg class="svg-fill" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 25 25">
+                    <path d="M20 12.5A7.5 7.5 0 1 1 12.5 5a7.5 7.5 0 0 1 7.5 7.5zM12.5 3a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-1 0v2a.5.5 0 0 0 .5.5zm0 19a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2a.5.5 0 0 0-.5-.5zm-10-10h-2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm22 0h-2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zM5.075 5.782a.5.5 0 1 0 .708-.707L4.368 3.661a.5.5 0 0 0-.707.707zm14.85 13.436a.5.5 0 0 0-.707.707l1.414 1.414a.5.5 0 0 0 .707-.707zm-14.85 0l-1.414 1.414a.5.5 0 0 0 .707.707l1.414-1.414a.5.5 0 1 0-.707-.707zM20.632 3.66l-1.415 1.414a.5.5 0 0 0 .708.707l1.414-1.414a.5.5 0 0 0-.707-.707z"></path>
+                </svg>
+            </i>
+                <div>
+                    <h3 class="bold primary-color launchaco-builder-hoverable">多肉时光</h3>
+                    <p class="paragraph secondary-color launchaco-builder-hoverable">
+                        肉友们公开的笔记尽情欣赏，看谁收获的赞最多</p>
+                </div>
+            </div>
+            <div class="flex mobile-flex-wrap mb20 mobile-text-center"><i
+                    class="icon secondary-bg mr20 mobile-center-icon launchaco-builder-hoverable">
+                <svg class="svg-fill" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 25 25">
+                    <path d="M12 13.732v5.293a5.498 5.498 0 0 1 5 5.475v.5H6v-.5a5.498 5.498 0 0 1 5-5.475V12a4.929 4.929 0 0 1 4-5c2.333-.459 6.958 1.042 9-1 0 3.417-3.083 9-8 9a6.519 6.519 0 0 1-4-1.268zM10 13c0-9.959-8-8.209-8-13C.964 1.036.42 2.937.146 4.925a7.001 7.001 0 0 0 6.363 7.901C7.705 12.93 8.917 13 10 13z"></path>
+                </svg>
+            </i>
+                <div>
+                    <h3 class="bold primary-color launchaco-builder-hoverable">问答</h3>
+                    <p class="paragraph secondary-color launchaco-builder-hoverable">
+                        多肉相关的问题尽管抛出来，和肉友们互相交流养肉心得</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 flex center-horizontal center-vertical">
+            <div class="android2 launchaco-builder-hoverable">
+                <div class="mask"><img src="images/3.png" alt="Screenshot of Android App"
+                                       class="mask-img"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--<a href="http://www.miitbeian.gov.cn/">京ICP备18060027号</a>-->
+</body>
+
+</html>
