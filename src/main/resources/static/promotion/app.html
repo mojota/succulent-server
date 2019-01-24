@@ -8,74 +8,10 @@
     <meta name="description" content="你的云上花园">
     <meta property="og:image" content="">
         <link rel="shortcut icon" href="images/succulentMU.png"/>
-    <link href="css/font.css" rel="stylesheet">
 
     <link rel="stylesheet" href="css/allTemplates.css">
 
     <style>
-        .launchaco-promo {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            cursor: pointer;
-            width: 0;
-            height: 0;
-            z-index: 999999;
-        }
-
-        .launchaco-promo__active {
-            width: initial;
-            height: initial;
-        }
-
-        .launchaco-promo-speechbubble {
-            font-family: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
-            position: absolute;
-            left: 50px;
-            top: -11px;
-            padding: 9px;
-            color: white;
-            border-radius: 3px;
-            background: linear-gradient(#227ef7, #1290fc);
-            font-size: 14px;
-            font-weight: 600;
-            width: 93px;
-            box-sizing: border-box;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .15s ease-in-out;
-        }
-
-        .launchaco-promo__active:hover .launchaco-promo-speechbubble {
-            opacity: 1;
-        }
-
-        .launchaco-promo svg {
-            transition: all .3s ease-in-out;
-            opacity: 0;
-        }
-
-        .launchaco-promo__active svg {
-            opacity: 1;
-        }
-
-        .launchaco-promo-speechbubble:before {
-            content: "";
-            width: 10px;
-            height: 10px;
-            transform: rotate(45deg);
-            left: -4px;
-            bottom: 10px;
-            border-radius: 3px;
-            background: #1290fc;
-            z-index: 2;
-            position: absolute
-        }
-
-        .launchaco-promo__active .launchaco-promo-speechbubble__animate {
-            animation: popinpopup 3s linear forwards 0.1s;
-        }
-
         @keyframes popinpopup {
             0% {
                 opacity: 0;
@@ -94,34 +30,31 @@
             }
         }
 
-        .launchaco-promo-animate:hover {
-            opacity: 1 !important;
-        }
     </style>
 
 
     <style>
-        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 {
-            background-image: linear-gradient(#8AD646, #36A27C)
+        .custom-color-text {
+            background-image: linear-gradient(#8bd746, #33a07f)
         }
 
-        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .primary-color {
+        .custom-color-text .primary-color {
             color: #FFFFFF
         }
 
-        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .secondary-color {
-            color: #D7F9FF
+        .custom-color-text .secondary-color {
+            color: #FFFFFF
         }
 
-        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .accent-bg {
+        .custom-color-text .accent-bg {
             background-color: #339F7F
         }
 
-        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .secondary-bg {
+        .custom-color-text .secondary-bg {
             background-color: #339F7F
         }
 
-        .custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91 .svg-fill {
+        .custom-color-text .svg-fill {
             fill: #FFFFFF
         }
     </style>
@@ -172,7 +105,7 @@
     </section>
 </div>
 <section id="checklist-1"
-         class="section custom-color-c975e958-5190-bd98-4c9c-4f49eeb5eb91"
+         class="section custom-color-text"
          sitemeta="[object Object]" activepage="Landing">
     <div class="container-lrg flex">
         <div class="col-6 flex flex-column center-vertical">
