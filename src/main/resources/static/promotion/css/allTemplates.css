@@ -2356,7 +2356,7 @@ img {
 }
 
 .green-flat {
-    background-color: #8bd746
+    background-color: #8bc34a
 }
 
 .green-flat .secondary-bg {
@@ -2380,7 +2380,7 @@ img {
 }
 
 .green-gradient {
-    background: linear-gradient(#33a07f, #8bd746)
+    background: linear-gradient(#33a07f, #8bc34a)
 }
 
 .green-gradient .secondary-bg {
@@ -2412,7 +2412,7 @@ img {
 }
 
 .green-accent .accent-bg {
-    background-color: #8bd746
+    background-color: #8bc34a
 }
 
 .green-accent .primary-color {
@@ -2432,7 +2432,7 @@ img {
 }
 
 .green-black .secondary-bg {
-    background-color: #8bd746
+    background-color: #8bc34a
 }
 
 .green-black .accent-bg {
@@ -2472,7 +2472,7 @@ img {
 }
 
 .green-white .svg-fill {
-    fill: #8bd746
+    fill: #8bc34a
 }
 
 .turquoise-flat {
