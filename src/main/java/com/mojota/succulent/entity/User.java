@@ -29,7 +29,6 @@ public class User {
     int userId;//用户id
 
     @NotEmpty(message = GlobalConstants.MSG_BUSINESS_ERROR_USER_EMPTY)
-    @Email(message = GlobalConstants.MSG_BUSINESS_ERROR_EMAIL_FORMAT_INCORRECT)
     @Column(nullable = false, unique = true, length = 100)
     String userName; //用户名
 
@@ -48,6 +47,7 @@ public class User {
     String region; //地区
 
     @Column(length = 50)
+    @Email(message = GlobalConstants.MSG_BUSINESS_ERROR_EMAIL_FORMAT_INCORRECT)
     String email;
 
     @Column(length = 50)

@@ -38,7 +38,7 @@ public class UserService {
         if (userRepository.countUserByUserName(user.getUserName()) > 0) {
             throw new BusinessException(ResultEnum.BUSINESS_ERROR_USER_REPEAT);
         } else {
-            logger.info(user.getUserName()+"注册成功,"+new Date());
+            logger.info(user.getUserName() + "注册成功," + user.getRegisterTime());
             return userRepository.save(user);
         }
     }
@@ -54,6 +54,26 @@ public class UserService {
         } else {
             return user;
         }
+    }
+
+    /**
+     * qq登录
+     * 若不存在则保存，已存在直接登录。
+     */
+    public User qqLogin(String userName, String passwordMd5, String nickname,
+                        String avatarUrl) throws Exception {
+        User user = userRepository.findUserByUserNameAndPassword(userName, passwordMd5);
+        if (user == null) {
+            user = new User();
+            user.setUserName(userName);
+            user.setPassword(passwordMd5);//密码加密
+            user.setRegisterTime(System.currentTimeMillis());
+            user.setNickname(nickname);
+            user.setAvatarUrl(avatarUrl);
+            user = userRepository.save(user);
+            logger.info(user.getUserName() + "qq注册成功,时间:" + user.getRegisterTime());
+        }
+        return user;
     }
 
     /**
@@ -136,4 +156,5 @@ public class UserService {
     public boolean isUserExist(String userName) {
         return (userRepository.countUserByUserName(userName) > 0);
     }
+
 }

@@ -71,6 +71,19 @@ public class UserController {
     }
 
     /**
+     * 使用qq登录
+     */
+    @PostMapping("/qqLogin")
+    public ResponseInfo<User> qqLogin(@RequestParam String userName,
+                                      @RequestParam String password,
+                                      @RequestParam(required = false) String nickname,
+                                      @RequestParam(required = false) String avatarUrl) throws Exception {
+        String passwordMd5 = ToolUtil.encode16bitMd5(password);
+        return ResponseUtil.success(userService.qqLogin(userName, passwordMd5, nickname,
+                avatarUrl));
+    }
+
+    /**
      * 重置密码
      */
     @PostMapping(value = "/resetPwd")
