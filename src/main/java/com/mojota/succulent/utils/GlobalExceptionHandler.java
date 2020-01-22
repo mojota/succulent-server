@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 //        e.printStackTrace();
         StringBuffer stsb = new StringBuffer("异常堆栈:");
         for (int i = 0; i < e.getStackTrace().length; i++) {
-            if (i <= 3) { //只打印最近3行
+            if (i <= 10) { //只打印最近n行
                 stsb.append("\n").append(e.getStackTrace()[i].toString());
             }
         }
